@@ -1,13 +1,23 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import Hero from "@/components/Home/Hero";
+import Products from "@/components/Home/Products";
+import About from "@/components/Home/About";
+import Contact from "@/components/Home/Contact";
+import { Helmet } from "react-helmet";
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <>
+      <Helmet>
+        <title>Sudevi Agro Foods - Taste The Tradition</title>
+        <meta name="description" content="Sudevi Agro Foods manufactures authentic Indian pickles, spices, soya chunks and vermicelli. Taste the tradition with our range of quality food products." />
+      </Helmet>
+      
+      <Hero />
+      <Products />
+      <About />
+      <Contact />
+    </>
   );
 };
 
