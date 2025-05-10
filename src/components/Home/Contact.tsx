@@ -7,6 +7,8 @@ import {
   CardContent,
   CardHeader
 } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import ContactForm from '@/components/Forms/ContactForm';
 
 const Contact = () => {
   return (
@@ -88,8 +90,25 @@ const Contact = () => {
           </div>
           
           <div className="text-center">
-            <Button asChild size="lg" className="bg-sudevi-red hover:bg-sudevi-darkRed">
-              <Link to="/contact">Contact Us</Link>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button size="lg" className="bg-sudevi-red hover:bg-sudevi-darkRed mr-4">
+                  Contact Us Now
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[550px]">
+                <DialogHeader>
+                  <DialogTitle>Contact Us</DialogTitle>
+                  <DialogDescription>
+                    Fill out the form below and we'll get back to you as soon as possible.
+                  </DialogDescription>
+                </DialogHeader>
+                <ContactForm />
+              </DialogContent>
+            </Dialog>
+            
+            <Button asChild size="lg" variant="outline" className="border-sudevi-red text-sudevi-red hover:bg-sudevi-red/10">
+              <Link to="/contact">View More Details</Link>
             </Button>
           </div>
         </div>

@@ -2,6 +2,7 @@
 import { Helmet } from "react-helmet";
 import { Button } from "@/components/ui/button";
 import { CheckCircle } from "lucide-react";
+import PartnerForm from "@/components/Forms/PartnerForm";
 
 const Partners = () => {
   return (
@@ -92,7 +93,7 @@ const Partners = () => {
                   Stock our products in your store and offer your customers authentic Indian flavors.
                 </p>
                 <Button asChild className="bg-sudevi-red hover:bg-sudevi-darkRed w-full">
-                  <a href="#retailer-form">Become a Retailer</a>
+                  <a href="#partner-form">Become a Retailer</a>
                 </Button>
               </div>
               
@@ -107,113 +108,15 @@ const Partners = () => {
                   Supply us with raw materials and ingredients to support our production.
                 </p>
                 <Button asChild className="bg-sudevi-red hover:bg-sudevi-darkRed w-full">
-                  <a href="#supplier-form">Become a Supplier</a>
+                  <a href="#partner-form">Become a Supplier</a>
                 </Button>
               </div>
             </div>
           </div>
           
-          <div className="bg-white p-8 rounded-lg shadow-lg" id="distributor-form">
+          <div className="bg-white p-8 rounded-lg shadow-lg" id="partner-form">
             <h2 className="text-2xl font-bold mb-6">Partner Application Form</h2>
-            <form className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-1">
-                    Company Name
-                  </label>
-                  <input
-                    type="text"
-                    id="company"
-                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-sudevi-red focus:border-sudevi-red"
-                    required
-                  />
-                </div>
-                
-                <div>
-                  <label htmlFor="partnerType" className="block text-sm font-medium text-gray-700 mb-1">
-                    Partnership Type
-                  </label>
-                  <select
-                    id="partnerType"
-                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-sudevi-red focus:border-sudevi-red"
-                    required
-                  >
-                    <option value="">Select a partnership type</option>
-                    <option value="distributor">Distributor</option>
-                    <option value="retailer">Retailer</option>
-                    <option value="supplier">Supplier</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                    Contact Person
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-sudevi-red focus:border-sudevi-red"
-                    required
-                  />
-                </div>
-                
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-sudevi-red focus:border-sudevi-red"
-                    required
-                  />
-                </div>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
-                    Phone Number
-                  </label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-sudevi-red focus:border-sudevi-red"
-                    required
-                  />
-                </div>
-                
-                <div>
-                  <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-1">
-                    Location/Region
-                  </label>
-                  <input
-                    type="text"
-                    id="location"
-                    className="w-full p-2 border border-gray-300 rounded-md focus:ring-sudevi-red focus:border-sudevi-red"
-                    required
-                  />
-                </div>
-              </div>
-              
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
-                  Additional Information
-                </label>
-                <textarea
-                  id="message"
-                  rows={5}
-                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-sudevi-red focus:border-sudevi-red"
-                ></textarea>
-              </div>
-              
-              <Button type="submit" className="bg-sudevi-red hover:bg-sudevi-darkRed">
-                Submit Application
-              </Button>
-            </form>
+            <PartnerForm />
           </div>
         </div>
       </section>

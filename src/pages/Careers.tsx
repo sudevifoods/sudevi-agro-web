@@ -1,6 +1,9 @@
 
 import { Helmet } from "react-helmet";
 import { Button } from "@/components/ui/button";
+import JobApplicationForm from "@/components/Forms/JobApplicationForm";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import ContactForm from "@/components/Forms/ContactForm";
 
 // Sample job openings
 const jobOpenings = [
@@ -95,9 +98,7 @@ const Careers = () => {
                       </span>
                     </div>
                     <p className="text-gray-600 mb-4">{job.description}</p>
-                    <Button className="bg-sudevi-red hover:bg-sudevi-darkRed">
-                      Apply Now
-                    </Button>
+                    <JobApplicationForm jobTitle={job.title} />
                   </div>
                 ))}
               </div>
@@ -107,9 +108,22 @@ const Careers = () => {
                 <p className="text-gray-600 mb-4">
                   We don't have any open positions right now, but we're always looking for talented individuals to join our team.
                 </p>
-                <Button className="bg-sudevi-red hover:bg-sudevi-darkRed">
-                  Submit Your Resume
-                </Button>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button className="bg-sudevi-red hover:bg-sudevi-darkRed">
+                      Submit Your Resume
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[550px] max-h-[90vh] overflow-y-auto">
+                    <DialogHeader>
+                      <DialogTitle>Submit Your Resume</DialogTitle>
+                      <DialogDescription>
+                        Even though we don't have any openings at the moment, we're always looking for talented individuals to join our team.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <JobApplicationForm jobTitle="General Application" />
+                  </DialogContent>
+                </Dialog>
               </div>
             )}
           </div>
@@ -119,9 +133,22 @@ const Careers = () => {
             <p className="text-gray-600 mb-6">
               We're always looking for talented individuals to join our team. Send us your resume and we'll keep it on file for future opportunities.
             </p>
-            <Button className="bg-sudevi-red hover:bg-sudevi-darkRed">
-              Send Spontaneous Application
-            </Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="bg-sudevi-red hover:bg-sudevi-darkRed">
+                  Send Spontaneous Application
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[550px] max-h-[90vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>Spontaneous Application</DialogTitle>
+                  <DialogDescription>
+                    Tell us about yourself and why you'd like to work with us.
+                  </DialogDescription>
+                </DialogHeader>
+                <JobApplicationForm jobTitle="Spontaneous Application" />
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
       </section>
