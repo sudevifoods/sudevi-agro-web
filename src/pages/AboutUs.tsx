@@ -1,5 +1,7 @@
 
 import { Helmet } from "react-helmet";
+import { Card, CardContent } from "@/components/ui/card";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 const AboutUs = () => {
   return (
@@ -72,32 +74,52 @@ const AboutUs = () => {
               Meet the dedicated team leading Sudevi Agro Foods towards excellence and growth.
             </p>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {/* You can add actual director/leadership details here */}
-              <div className="bg-white p-6 rounded-lg shadow-md text-center">
-                <div className="w-32 h-32 rounded-full bg-gray-200 mx-auto mb-4"></div>
-                <h3 className="text-xl font-semibold mb-1">Director Name</h3>
-                <p className="text-sudevi-red mb-3">Managing Director</p>
-                <p className="text-gray-600 text-sm">
-                  Brief bio about the director and their experience in the food industry.
-                </p>
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow-md text-center">
-                <div className="w-32 h-32 rounded-full bg-gray-200 mx-auto mb-4"></div>
-                <h3 className="text-xl font-semibold mb-1">Director Name</h3>
-                <p className="text-sudevi-red mb-3">Operations Director</p>
-                <p className="text-gray-600 text-sm">
-                  Brief bio about the director and their experience in the food industry.
-                </p>
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow-md text-center">
-                <div className="w-32 h-32 rounded-full bg-gray-200 mx-auto mb-4"></div>
-                <h3 className="text-xl font-semibold mb-1">Director Name</h3>
-                <p className="text-sudevi-red mb-3">Finance Director</p>
-                <p className="text-gray-600 text-sm">
-                  Brief bio about the director and their experience in the food industry.
-                </p>
-              </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <Card className="overflow-hidden">
+                <CardContent className="p-0">
+                  <div className="flex flex-col md:flex-row">
+                    <div className="w-full md:w-2/5">
+                      <img 
+                        src="/lovable-uploads/d0e784b9-5979-40e9-ab69-67edccb0c8e9.png"
+                        alt="Mr. AMAR KUMAR BINDHANI" 
+                        className="w-full h-full object-cover aspect-square"
+                      />
+                    </div>
+                    <div className="p-6 w-full md:w-3/5">
+                      <h3 className="text-xl font-semibold mb-1">Mr. AMAR KUMAR BINDHANI</h3>
+                      <p className="text-sudevi-red mb-3">Managing Director</p>
+                      <p className="text-gray-600">
+                        Mr. Amar Kumar Bindhani has vast experience in sales and marketing growth planning. 
+                        He has worked in various industries including Reliance Retail and JioMart B2B. His expertise in 
+                        market development and strategic planning guides Sudevi Agro Foods towards new heights of success.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card className="overflow-hidden">
+                <CardContent className="p-0">
+                  <div className="flex flex-col md:flex-row">
+                    <div className="w-full md:w-2/5">
+                      <img 
+                        src="/lovable-uploads/6c22abad-0854-4624-aea3-1181c89c4fa9.png"
+                        alt="Mr. KISHORE KUMAR BINDHANI" 
+                        className="w-full h-full object-cover aspect-square"
+                      />
+                    </div>
+                    <div className="p-6 w-full md:w-3/5">
+                      <h3 className="text-xl font-semibold mb-1">Mr. KISHORE KUMAR BINDHANI</h3>
+                      <p className="text-sudevi-red mb-3">Operations Director</p>
+                      <p className="text-gray-600">
+                        Mr. Kishore Kumar Bindhani brings extensive experience in manufacturing industries and the food processing 
+                        sector. Having worked at Alpla India Pvt. Ltd., he oversees our production facilities and ensures 
+                        that all products meet our high quality standards while maintaining operational efficiency.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
 
