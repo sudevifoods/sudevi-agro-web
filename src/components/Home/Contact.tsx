@@ -2,6 +2,11 @@
 import { Button } from '@/components/ui/button';
 import { Phone, Mail, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { 
+  Card,
+  CardContent,
+  CardHeader
+} from '@/components/ui/card';
 
 const Contact = () => {
   return (
@@ -15,50 +20,78 @@ const Contact = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="bg-white p-6 rounded-lg shadow-md text-center">
-            <div className="bg-sudevi-red/10 p-3 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-              <Phone className="h-8 w-8 text-sudevi-red" />
-            </div>
-            <h3 className="text-xl font-semibold mb-2">Call Us</h3>
-            <p className="text-gray-600 mb-4">Our customer support team is ready to help you</p>
-            <a 
-              href="tel:+918260990093" 
-              className="text-sudevi-red font-medium hover:underline"
-            >
-              +91 8260990093
-            </a>
-          </div>
+          <Card className="border-0 shadow-md">
+            <CardHeader className="pb-0 flex items-center justify-center">
+              <div className="bg-sudevi-red/10 p-3 rounded-full w-16 h-16 flex items-center justify-center">
+                <Phone className="h-8 w-8 text-sudevi-red" />
+              </div>
+            </CardHeader>
+            <CardContent className="text-center pt-4">
+              <h3 className="text-xl font-semibold mb-2">Call Us</h3>
+              <p className="text-gray-600 mb-4">Our customer support team is ready to help you</p>
+              <a 
+                href="tel:+918260990093" 
+                className="text-sudevi-red font-medium hover:underline"
+              >
+                +91 8260990093
+              </a>
+            </CardContent>
+          </Card>
 
-          <div className="bg-white p-6 rounded-lg shadow-md text-center">
-            <div className="bg-sudevi-red/10 p-3 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-              <Mail className="h-8 w-8 text-sudevi-red" />
-            </div>
-            <h3 className="text-xl font-semibold mb-2">Email Us</h3>
-            <p className="text-gray-600 mb-4">Send us an email and we'll get back to you</p>
-            <a 
-              href="mailto:sudevifoods@gmail.com" 
-              className="text-sudevi-red font-medium hover:underline"
-            >
-              sudevifoods@gmail.com
-            </a>
-          </div>
+          <Card className="border-0 shadow-md">
+            <CardHeader className="pb-0 flex items-center justify-center">
+              <div className="bg-sudevi-red/10 p-3 rounded-full w-16 h-16 flex items-center justify-center">
+                <Mail className="h-8 w-8 text-sudevi-red" />
+              </div>
+            </CardHeader>
+            <CardContent className="text-center pt-4">
+              <h3 className="text-xl font-semibold mb-2">Email Us</h3>
+              <p className="text-gray-600 mb-4">Send us an email and we'll get back to you</p>
+              <a 
+                href="mailto:sudevifoods@gmail.com" 
+                className="text-sudevi-red font-medium hover:underline"
+              >
+                sudevifoods@gmail.com
+              </a>
+            </CardContent>
+          </Card>
 
-          <div className="bg-white p-6 rounded-lg shadow-md text-center">
-            <div className="bg-sudevi-red/10 p-3 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-              <MapPin className="h-8 w-8 text-sudevi-red" />
-            </div>
-            <h3 className="text-xl font-semibold mb-2">Visit Us</h3>
-            <p className="text-gray-600 mb-4">Come visit our manufacturing facility</p>
-            <address className="not-italic text-sudevi-red font-medium">
-              Mohammadpur, Balasore, 756002
-            </address>
-          </div>
+          <Card className="border-0 shadow-md">
+            <CardHeader className="pb-0 flex items-center justify-center">
+              <div className="bg-sudevi-red/10 p-3 rounded-full w-16 h-16 flex items-center justify-center">
+                <MapPin className="h-8 w-8 text-sudevi-red" />
+              </div>
+            </CardHeader>
+            <CardContent className="text-center pt-4">
+              <h3 className="text-xl font-semibold mb-2">Visit Us</h3>
+              <p className="text-gray-600 mb-4">Come visit our manufacturing facility</p>
+              <address className="not-italic text-sudevi-red font-medium">
+                Mohammadpur, Balasore, 756002
+              </address>
+            </CardContent>
+          </Card>
         </div>
 
-        <div className="text-center mt-12">
-          <Button asChild size="lg" className="bg-sudevi-red hover:bg-sudevi-darkRed">
-            <Link to="/contact">Contact Us</Link>
-          </Button>
+        <div className="mt-12 space-y-8">
+          <div className="rounded-lg overflow-hidden shadow-lg h-64 w-full">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14772.287033308506!2d86.9340458!3d21.4827867!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a1c5ed70f4ccb0d%3A0x54d4ca9456691d95!2sSudevi%20Agro%20Foods%20Pvt.%20Ltd.!5e0!3m2!1sen!2sin!4v1716414302279!5m2!1sen!2sin" 
+              width="100%" 
+              height="100%" 
+              style={{ border: 0 }} 
+              allowFullScreen 
+              loading="lazy" 
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Sudevi Agro Foods Location"
+              aria-label="Google Maps showing the location of Sudevi Agro Foods Pvt. Ltd."
+            ></iframe>
+          </div>
+          
+          <div className="text-center">
+            <Button asChild size="lg" className="bg-sudevi-red hover:bg-sudevi-darkRed">
+              <Link to="/contact">Contact Us</Link>
+            </Button>
+          </div>
         </div>
       </div>
     </section>

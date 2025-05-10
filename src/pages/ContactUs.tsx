@@ -204,10 +204,19 @@ const ContactUs = () => {
       
       <section className="pb-16">
         <div className="container mx-auto px-4">
-          <div className="bg-gray-200 rounded-lg h-96">
-            <div className="w-full h-full flex items-center justify-center text-gray-500">
-              Map will be embedded here
-            </div>
+          <h2 className="text-2xl font-bold mb-6">Find Us</h2>
+          <div className="rounded-lg overflow-hidden shadow-lg h-96 w-full">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d14772.287033308506!2d86.9340458!3d21.4827867!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a1c5ed70f4ccb0d%3A0x54d4ca9456691d95!2sSudevi%20Agro%20Foods%20Pvt.%20Ltd.!5e0!3m2!1sen!2sin!4v1716414302279!5m2!1sen!2sin" 
+              width="100%" 
+              height="100%" 
+              style={{ border: 0 }} 
+              allowFullScreen 
+              loading="lazy" 
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Sudevi Agro Foods Location"
+              aria-label="Google Maps showing the location of Sudevi Agro Foods Pvt. Ltd."
+            ></iframe>
           </div>
         </div>
       </section>
