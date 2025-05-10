@@ -1,20 +1,13 @@
-
 import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin, Facebook, Instagram, Linkedin } from 'lucide-react';
-
 const Footer = () => {
-  return (
-    <footer className="bg-gray-900 text-white pt-12 pb-8">
+  return <footer className="bg-gray-900 text-white pt-12 pb-8">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div>
             <div className="mb-4">
-              <img 
-                src="/lovable-uploads/35d4be78-f0f1-4c6a-8bf7-40a140323a71.png" 
-                alt="Sudevi Logo" 
-                className="h-16 mb-3"
-              />
+              <img alt="Sudevi Logo" className="h-16 mb-3" src="/lovable-uploads/52338f59-44c9-401f-8a0d-b8ebbbf6dea6.png" />
               <p className="text-gray-300 text-sm">
                 Sudevi Agro Foods Private Limited is dedicated to bringing traditional flavors to modern tables through our range of pickles, spices, soya chunks and vermicelli.
               </p>
@@ -72,25 +65,13 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-bold mb-4">Connect With Us</h3>
             <div className="flex space-x-4">
-              <a 
-                href="#" 
-                className="bg-gray-700 p-2 rounded-full hover:bg-sudevi-red transition-colors"
-                aria-label="Facebook"
-              >
+              <a href="#" className="bg-gray-700 p-2 rounded-full hover:bg-sudevi-red transition-colors" aria-label="Facebook">
                 <Facebook className="h-5 w-5" />
               </a>
-              <a 
-                href="#" 
-                className="bg-gray-700 p-2 rounded-full hover:bg-sudevi-red transition-colors"
-                aria-label="Instagram"
-              >
+              <a href="#" className="bg-gray-700 p-2 rounded-full hover:bg-sudevi-red transition-colors" aria-label="Instagram">
                 <Instagram className="h-5 w-5" />
               </a>
-              <a 
-                href="#" 
-                className="bg-gray-700 p-2 rounded-full hover:bg-sudevi-red transition-colors"
-                aria-label="LinkedIn"
-              >
+              <a href="#" className="bg-gray-700 p-2 rounded-full hover:bg-sudevi-red transition-colors" aria-label="LinkedIn">
                 <Linkedin className="h-5 w-5" />
               </a>
             </div>
@@ -109,8 +90,6 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;
