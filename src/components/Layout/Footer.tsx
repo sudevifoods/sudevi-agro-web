@@ -1,7 +1,6 @@
 
 import { Link } from 'react-router-dom';
 import { Phone, Mail, MapPin, Facebook, Instagram, Linkedin } from 'lucide-react';
-
 const Footer = () => {
   return <footer className="bg-gray-900 text-white pt-12 pb-8">
       <div className="container mx-auto px-4">
@@ -67,13 +66,13 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-bold mb-4">Connect With Us</h3>
             <div className="flex space-x-4">
-              <a href="https://instagram.com/sudevifoods" target="_blank" rel="noopener noreferrer" className="bg-gray-700 p-2 rounded-full hover:bg-sudevi-red transition-colors" aria-label="Instagram">
+              <a href="https://instagram.sudevifoods.com" target="_blank" rel="noopener noreferrer" className="bg-gray-700 p-2 rounded-full hover:bg-sudevi-red transition-colors" aria-label="Instagram">
                 <Instagram className="h-5 w-5" />
               </a>
-              <a href="https://facebook.com/sudevifoods" target="_blank" rel="noopener noreferrer" className="bg-gray-700 p-2 rounded-full hover:bg-sudevi-red transition-colors" aria-label="Facebook">
+              <a href="https://facebook.sudevifoods.com" target="_blank" rel="noopener noreferrer" className="bg-gray-700 p-2 rounded-full hover:bg-sudevi-red transition-colors" aria-label="Facebook">
                 <Facebook className="h-5 w-5" />
               </a>
-              <a href="https://linkedin.com/company/sudevifoods" target="_blank" rel="noopener noreferrer" className="bg-gray-700 p-2 rounded-full hover:bg-sudevi-red transition-colors" aria-label="LinkedIn">
+              <a href="https://linkedin.sudevifoods.com" target="_blank" rel="noopener noreferrer" className="bg-gray-700 p-2 rounded-full hover:bg-sudevi-red transition-colors" aria-label="LinkedIn">
                 <Linkedin className="h-5 w-5" />
               </a>
             </div>
