@@ -2,17 +2,49 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Check } from "lucide-react";
 
-// Sample product data - replace with actual products
+// Updated product data with real images
 const productCategories = [
   {
     id: "pickles",
     name: "Pickles",
     products: [
-      { id: 1, name: "Mango Pickle", description: "Traditional Indian mango pickle made with premium mangoes and spices." },
-      { id: 2, name: "Lemon Pickle", description: "Tangy lemon pickle prepared with the finest lemons and authentic spices." },
-      { id: 3, name: "Mixed Vegetable Pickle", description: "A delightful mix of vegetables preserved in our special blend of spices." },
-      { id: 4, name: "Garlic Pickle", description: "Spicy garlic pickle made with fresh garlic and traditional recipe." },
+      { 
+        id: 1, 
+        name: "Sweet Mango Pickle", 
+        description: "Traditional sweet mango pickle made with premium mangoes and aromatic spices. No added preservatives.", 
+        image: "/lovable-uploads/16a778da-81c5-4bc9-bc15-9874378511f0.png",
+        features: ["No Added Preservatives", "Purely Home Made", "Rich in Taste"]
+      },
+      { 
+        id: 2, 
+        name: "Mix Pickle", 
+        description: "Tangy & spicy mix pickle prepared with various vegetables and authentic spices. 100% Natural.", 
+        image: "/lovable-uploads/926e4570-c385-4a82-b88e-7ba81d835a2f.png",
+        features: ["Tangy & Spicy", "Rich in Taste", "100% Natural"]
+      },
+      { 
+        id: 3, 
+        name: "Green Chilli Pickle", 
+        description: "Spicy green chilli pickle made with fresh green chillies and traditional recipe.", 
+        image: "/lovable-uploads/0fdf8210-758c-4dc6-b342-b2eef29814de.png",
+        features: ["Spicy & Tangy Taste", "No Artificial Preservatives", "Made with Fresh Ingredients", "Rich in Flavor"]
+      },
+      { 
+        id: 4, 
+        name: "Green Mango Pickle", 
+        description: "Sweet & spicy green mango pickle made with raw mangoes following traditional recipes.", 
+        image: "/lovable-uploads/78092173-7081-4527-a9cc-672ab2416ffe.png",
+        features: ["Sweet & Spicy", "No Artificial Flavours", "Traditional Recipe", "Made with Raw Mango"]
+      },
+      { 
+        id: 5, 
+        name: "Sweet Berry", 
+        description: "Limited edition sweet berry preserve made with mixed berries. Purely home made with no preservatives.", 
+        image: "/lovable-uploads/2dbfb706-0547-4ba1-91f1-aa7f73b59885.png",
+        features: ["Limited Edition", "Purely Home Made", "Rich in Flavor"]
+      },
     ]
   },
   {
@@ -92,15 +124,36 @@ const Products = () => {
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {category.products.map((product) => (
-                    <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-                      <div className="h-48 bg-gray-200">
-                        <div className="w-full h-full flex items-center justify-center text-gray-500">
-                          Product Image
-                        </div>
+                    <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:shadow-lg">
+                      <div className="h-64 bg-gray-100 overflow-hidden">
+                        {product.image ? (
+                          <img 
+                            src={product.image} 
+                            alt={product.name} 
+                            className="w-full h-full object-contain p-4"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-gray-500">
+                            Product Image
+                          </div>
+                        )}
                       </div>
                       <div className="p-6">
                         <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
                         <p className="text-gray-600 mb-4">{product.description}</p>
+                        
+                        {product.features && (
+                          <div className="mt-4">
+                            <ul className="space-y-2">
+                              {product.features.map((feature, index) => (
+                                <li key={index} className="flex items-center">
+                                  <Check className="h-4 w-4 text-sudevi-red mr-2" />
+                                  <span className="text-sm text-gray-700">{feature}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
                       </div>
                     </div>
                   ))}

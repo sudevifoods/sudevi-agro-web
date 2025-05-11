@@ -12,7 +12,7 @@ const Hero = () => {
       
       <div className="container mx-auto px-4 py-20 lg:py-32 relative z-10">
         <div className="max-w-3xl">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 animate-fade-in">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 animate-fade-in text-[#ea384c]">
             Taste The Tradition
           </h1>
           <p className="text-xl md:text-2xl mb-8 animate-fade-in">
