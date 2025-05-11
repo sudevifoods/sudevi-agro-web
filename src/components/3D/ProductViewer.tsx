@@ -4,6 +4,18 @@ import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      mesh: React.DetailedHTMLProps<any, any> & { ref?: React.RefObject<THREE.Mesh> };
+      boxGeometry: React.DetailedHTMLProps<any, any>;
+      meshStandardMaterial: React.DetailedHTMLProps<any, any> & { map?: THREE.Texture };
+      ambientLight: React.DetailedHTMLProps<any, any>;
+      spotLight: React.DetailedHTMLProps<any, any>;
+    }
+  }
+}
+
 interface ProductViewerProps {
   imageUrl: string;
   rotation?: boolean;

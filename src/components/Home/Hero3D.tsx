@@ -6,6 +6,18 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import * as THREE from 'three';
 
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      mesh: React.DetailedHTMLProps<any, any> & { ref?: React.RefObject<THREE.Mesh> };
+      boxGeometry: React.DetailedHTMLProps<any, any>;
+      meshStandardMaterial: React.DetailedHTMLProps<any, any> & { map?: THREE.Texture };
+      ambientLight: React.DetailedHTMLProps<any, any>;
+      directionalLight: React.DetailedHTMLProps<any, any>;
+    }
+  }
+}
+
 function Box() {
   const meshRef = useRef<THREE.Mesh>(null!);
   const texture = useTexture('/lovable-uploads/52338f59-44c9-401f-8a0d-b8ebbbf6dea6.png');
