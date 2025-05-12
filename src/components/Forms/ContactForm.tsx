@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
+import { submitLead } from "@/api/leadService";
 
 interface ContactFormProps {
   submitButtonText?: string;
@@ -30,25 +31,31 @@ const ContactForm = ({ submitButtonText = "Send Message", onSuccess }: ContactFo
     setIsSubmitting(true);
     
     try {
-      // In a real implementation with Firebase, you would send the data to Firebase here
-      // For now we'll simulate a successful submission
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const result = await submitLead(formData);
       
-      toast({
-        title: "Form submitted successfully",
-        description: "Thank you for contacting us! We will get back to you soon."
-      });
-      
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        subject: "",
-        message: ""
-      });
-      
-      if (onSuccess) {
-        onSuccess();
+      if (result.success) {
+        toast({
+          title: "Form submitted successfully",
+          description: "Thank you for contacting us! We will get back to you soon."
+        });
+        
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          subject: "",
+          message: ""
+        });
+        
+        if (onSuccess) {
+          onSuccess();
+        }
+      } else {
+        toast({
+          title: "Error",
+          description: result.message || "There was a problem submitting your form. Please try again.",
+          variant: "destructive"
+        });
       }
     } catch (error) {
       toast({
