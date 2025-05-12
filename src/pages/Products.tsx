@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -51,18 +50,45 @@ const productCategories = [
     id: "spices",
     name: "Spices",
     products: [
-      { id: 1, name: "Turmeric Powder", description: "Pure turmeric powder with high curcumin content for health and flavor." },
-      { id: 2, name: "Chili Powder", description: "Premium quality chili powder with perfect heat and color." },
-      { id: 3, name: "Garam Masala", description: "Aromatic blend of spices for authentic Indian flavor." },
-      { id: 4, name: "Coriander Powder", description: "Freshly ground coriander seeds with rich aroma." },
+      { 
+        id: 1, 
+        name: "Whole Jeera", 
+        description: "Premium quality whole cumin seeds with rich aroma and flavor.", 
+        image: "/lovable-uploads/0cc44a35-9de5-44a5-9024-1e43fc0909d4.png",
+        features: ["Premium Quality", "Rich Aroma", "No Additives"]
+      },
+      { 
+        id: 2, 
+        name: "Jeera Powder", 
+        description: "Finely ground cumin powder for authentic Indian flavor.",
+        image: "/lovable-uploads/33874bcc-52bc-4b88-81a2-706287205d56.png",
+        features: ["Wholesome", "Freshly Ground", "Pure Spice"]
+      },
+      { 
+        id: 3, 
+        name: "Flax Seeds", 
+        description: "Raw and unroasted flax seeds rich in omega-3 fatty acids.",
+        image: "/lovable-uploads/fe32e1b7-f13d-4bfd-a356-2183223c37f4.png",
+        features: ["Raw & Unroasted", "High in Omega-3", "Natural Goodness"]
+      },
+      { id: 4, name: "Turmeric Powder", description: "Pure turmeric powder with high curcumin content for health and flavor." },
+      { id: 5, name: "Chili Powder", description: "Premium quality chili powder with perfect heat and color." },
+      { id: 6, name: "Garam Masala", description: "Aromatic blend of spices for authentic Indian flavor." },
+      { id: 7, name: "Coriander Powder", description: "Freshly ground coriander seeds with rich aroma." },
     ]
   },
   {
     id: "soya",
     name: "Soya Chunks",
     products: [
-      { id: 1, name: "Mini Soya Chunks", description: "Small sized soya chunks perfect for curries and stir-fries." },
-      { id: 2, name: "Regular Soya Chunks", description: "Standard sized soya chunks with high protein content." },
+      { 
+        id: 1, 
+        name: "Regular Soya Chunks", 
+        description: "High-protein soya chunks that absorb more masalas and flavors.",
+        image: "/lovable-uploads/d014a63a-1af5-4585-99d3-5fe4ce3cc927.png",
+        features: ["High Protein", "Absorbs More Masalas", "100% Veg", "Juicy and Tasty"]
+      },
+      { id: 2, name: "Mini Soya Chunks", description: "Small sized soya chunks perfect for curries and stir-fries." },
       { id: 3, name: "Soya Granules", description: "Finely textured soya granules for various recipes." },
     ]
   },
@@ -70,9 +96,16 @@ const productCategories = [
     id: "vermicelli",
     name: "Vermicelli",
     products: [
-      { id: 1, name: "Plain Vermicelli", description: "Traditional plain vermicelli for sweet and savory dishes." },
-      { id: 2, name: "Roasted Vermicelli", description: "Pre-roasted vermicelli for quick and easy preparation." },
-      { id: 3, name: "Rice Vermicelli", description: "Rice-based vermicelli for delicious Asian dishes." },
+      { 
+        id: 1, 
+        name: "Wheat Vermicelli", 
+        description: "Semiya vermicelli made from wheat for delicious sweet and savory dishes.",
+        image: "/lovable-uploads/9373690e-0fa6-46ea-b056-74fc97c8fa7b.png",
+        features: ["Made from Wheat", "Saturated Fat Free", "Good Source of Fiber", "No Added Preservatives"]
+      },
+      { id: 2, name: "Plain Vermicelli", description: "Traditional plain vermicelli for sweet and savory dishes." },
+      { id: 3, name: "Roasted Vermicelli", description: "Pre-roasted vermicelli for quick and easy preparation." },
+      { id: 4, name: "Rice Vermicelli", description: "Rice-based vermicelli for delicious Asian dishes." },
     ]
   },
 ];

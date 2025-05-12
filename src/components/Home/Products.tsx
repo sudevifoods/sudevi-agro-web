@@ -8,25 +8,25 @@ const productCategories = [
     id: 1,
     name: 'Pickles',
     description: 'Traditional Indian pickles crafted with age-old recipes and premium ingredients.',
-    image: 'https://images.unsplash.com/photo-1589135233689-df9aad8fbffd?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+    image: '/lovable-uploads/2dbfb706-0547-4ba1-91f1-aa7f73b59885.png',
   },
   {
     id: 2,
     name: 'Spices',
     description: 'Pure, aromatic spices that bring authentic flavors to your cooking.',
-    image: 'https://images.unsplash.com/photo-1532336414038-cf19250c5757?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+    image: '/lovable-uploads/0cc44a35-9de5-44a5-9024-1e43fc0909d4.png',
   },
   {
     id: 3,
     name: 'Soya Chunks',
     description: 'High-protein, nutritious soya chunks perfect for a healthy diet.',
-    image: 'https://images.unsplash.com/photo-1612257999012-405c2352650b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+    image: '/lovable-uploads/d014a63a-1af5-4585-99d3-5fe4ce3cc927.png',
   },
   {
     id: 4,
     name: 'Vermicelli',
     description: 'Premium quality vermicelli that makes delicious dishes in minutes.',
-    image: 'https://images.unsplash.com/photo-1612260505559-cc7fbd92d4d4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
+    image: '/lovable-uploads/9373690e-0fa6-46ea-b056-74fc97c8fa7b.png',
   },
 ];
 
@@ -51,7 +51,7 @@ const Products = () => {
                 <img 
                   src={category.image} 
                   alt={category.name} 
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain p-2"
                 />
               </div>
               <div className="p-6">

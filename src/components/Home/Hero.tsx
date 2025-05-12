@@ -6,8 +6,14 @@ const Hero = () => {
   return (
     <section className="relative bg-sudevi-red text-white overflow-hidden">
       <div 
-        className="absolute inset-0 bg-cover bg-center hero-gradient"
-        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1516714435131-44d6b64dc6a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80')" }}
+        className="absolute inset-0 bg-cover bg-center hero-gradient opacity-80"
+        style={{ 
+          backgroundImage: "url('/lovable-uploads/33874bcc-52bc-4b88-81a2-706287205d56.png'), url('/lovable-uploads/d014a63a-1af5-4585-99d3-5fe4ce3cc927.png')",
+          backgroundSize: "contain, cover",
+          backgroundPosition: "right, center",
+          backgroundRepeat: "no-repeat, no-repeat",
+          backgroundBlendMode: "multiply"
+        }}
       ></div>
       
       <div className="container mx-auto px-4 py-20 lg:py-32 relative z-10">
