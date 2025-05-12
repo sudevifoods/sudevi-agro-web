@@ -13,8 +13,8 @@ const ContactUs = () => {
       
       <div className="bg-gray-50 py-12">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold text-center mb-6">Contact Us</h1>
-          <p className="text-gray-600 text-center max-w-3xl mx-auto">
+          <h1 className="text-4xl md:text-5xl font-bold text-center mb-6 animate-fade-in">Contact Us</h1>
+          <p className="text-gray-600 text-center max-w-3xl mx-auto animate-fade-in delay-200">
             We'd love to hear from you. Get in touch with our team for any inquiries or information.
           </p>
         </div>
@@ -23,15 +23,15 @@ const ContactUs = () => {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <div>
+            <div className="reveal-left">
               <h2 className="text-2xl font-bold mb-6">Send Us a Message</h2>
               <ContactForm />
             </div>
             
-            <div>
+            <div className="reveal-right">
               <h2 className="text-2xl font-bold mb-6">Our Contact Information</h2>
               <div className="space-y-6">
-                <div className="flex items-start">
+                <div className="flex items-start hover-shadow p-4 rounded-lg transition-medium">
                   <MapPin className="h-6 w-6 text-sudevi-red mr-4 mt-1" />
                   <div>
                     <h3 className="font-semibold text-lg mb-1">Address</h3>
@@ -44,24 +44,24 @@ const ContactUs = () => {
                   </div>
                 </div>
                 
-                <div className="flex items-start">
+                <div className="flex items-start hover-shadow p-4 rounded-lg transition-medium">
                   <Phone className="h-6 w-6 text-sudevi-red mr-4 mt-1" />
                   <div>
                     <h3 className="font-semibold text-lg mb-1">Phone</h3>
                     <p className="text-gray-600">
-                      <a href="tel:+918260990093" className="hover:text-sudevi-red">
+                      <a href="tel:+918260990093" className="hover:text-sudevi-red hover-underline">
                         +91 8260990093
                       </a>
                     </p>
                   </div>
                 </div>
                 
-                <div className="flex items-start">
+                <div className="flex items-start hover-shadow p-4 rounded-lg transition-medium">
                   <Mail className="h-6 w-6 text-sudevi-red mr-4 mt-1" />
                   <div>
                     <h3 className="font-semibold text-lg mb-1">Email</h3>
                     <p className="text-gray-600">
-                      <a href="mailto:sudevifoods@gmail.com" className="hover:text-sudevi-red">
+                      <a href="mailto:sudevifoods@gmail.com" className="hover:text-sudevi-red hover-underline">
                         sudevifoods@gmail.com
                       </a>
                     </p>
@@ -69,7 +69,7 @@ const ContactUs = () => {
                 </div>
               </div>
               
-              <div className="mt-8">
+              <div className="mt-8 reveal">
                 <h3 className="font-semibold text-lg mb-4">Business Hours</h3>
                 <ul className="space-y-2 text-gray-600">
                   <li className="flex justify-between">
@@ -93,8 +93,8 @@ const ContactUs = () => {
       
       <section className="pb-16">
         <div className="container mx-auto px-4">
-          <h2 className="text-2xl font-bold mb-6">Find Us</h2>
-          <div className="rounded-lg overflow-hidden shadow-lg h-96 w-full">
+          <h2 className="text-2xl font-bold mb-6 reveal">Find Us</h2>
+          <div className="rounded-lg overflow-hidden shadow-lg h-96 w-full reveal hover-shadow">
             <iframe 
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3714.0716833772265!2d86.93404579999999!3d21.482786699999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a1c5ed70f4ccb0d%3A0x54d4ca9456691d95!2sSudevi%20Agro%20Foods%20Pvt.%20Ltd.!5e0!3m2!1sen!2sin!4v1716414302279!5m2!1sen!2sin" 
               width="100%" 
