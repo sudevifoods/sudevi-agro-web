@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Helmet } from "react-helmet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -123,8 +122,8 @@ const Products = () => {
       
       <div className="bg-gray-50 py-12">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold text-center mb-6 animate-fade-in">Our Products</h1>
-          <p className="text-gray-600 text-center max-w-3xl mx-auto animate-fade-in delay-200">
+          <h1 className="text-4xl md:text-5xl font-bold text-center mb-6">Our Products</h1>
+          <p className="text-gray-600 text-center max-w-3xl mx-auto">
             Discover our range of authentic Indian food products made with premium ingredients and traditional recipes.
           </p>
         </div>
@@ -133,13 +132,13 @@ const Products = () => {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <Tabs defaultValue="pickles" value={activeTab} onValueChange={setActiveTab}>
-            <div className="flex justify-center mb-12 reveal">
+            <div className="flex justify-center mb-12">
               <TabsList className="bg-gray-100 p-1">
                 {productCategories.map((category) => (
                   <TabsTrigger 
                     key={category.id} 
                     value={category.id}
-                    className="px-4 py-2 data-[state=active]:bg-sudevi-red data-[state=active]:text-white transition-medium"
+                    className="px-4 py-2 data-[state=active]:bg-sudevi-red data-[state=active]:text-white"
                   >
                     {category.name}
                   </TabsTrigger>
@@ -149,7 +148,7 @@ const Products = () => {
             
             {productCategories.map((category) => (
               <TabsContent key={category.id} value={category.id} className="animate-fade-in">
-                <div className="mb-8 reveal">
+                <div className="mb-8">
                   <h2 className="text-3xl font-bold mb-6 text-center">{category.name}</h2>
                   <p className="text-gray-600 text-center max-w-3xl mx-auto mb-12">
                     Explore our range of premium quality {category.name.toLowerCase()}.
@@ -157,18 +156,14 @@ const Products = () => {
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {category.products.map((product, index) => (
-                    <div 
-                      key={product.id} 
-                      className="bg-white rounded-lg shadow-md overflow-hidden hover-shadow reveal"
-                      style={{ transitionDelay: `${index * 100}ms` }}
-                    >
+                  {category.products.map((product) => (
+                    <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:shadow-lg">
                       <div className="h-64 bg-gray-100 overflow-hidden">
                         {product.image ? (
                           <img 
                             src={product.image} 
                             alt={product.name} 
-                            className="w-full h-full object-contain p-4 transition-medium hover:scale-105"
+                            className="w-full h-full object-contain p-4"
                           />
                         ) : (
                           <div className="w-full h-full flex items-center justify-center text-gray-500">

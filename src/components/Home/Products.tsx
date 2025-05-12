@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const productCategories = [
   {
@@ -32,10 +32,35 @@ const productCategories = [
 ];
 
 const Products = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
+
   return (
-    <section className="py-16 bg-gray-50">
+    <section ref={sectionRef} className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12 reveal">
+        <div className={`text-center mb-12 transition-all duration-700 ${isVisible ? 'opacity-100' : 'opacity-0 translate-y-10'}`}>
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Product Range</h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
             Discover our diverse range of high-quality food products, crafted with authentic recipes and premium ingredients.
@@ -46,7 +71,7 @@ const Products = () => {
           {productCategories.map((category, index) => (
             <div 
               key={category.id} 
-              className={`bg-white rounded-lg shadow-md overflow-hidden reveal`}
+              className={`bg-white rounded-lg shadow-md overflow-hidden transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
               style={{ transitionDelay: `${index * 150}ms` }}
             >
               <div className="h-48 overflow-hidden">
@@ -61,7 +86,7 @@ const Products = () => {
                 <p className="text-gray-600 mb-4 text-sm">{category.description}</p>
                 <Link 
                   to={`/products#${category.name.toLowerCase()}`} 
-                  className="text-sudevi-red font-medium inline-flex items-center group hover-underline"
+                  className="text-sudevi-red font-medium inline-flex items-center group"
                 >
                   Explore 
                   <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -71,11 +96,11 @@ const Products = () => {
           ))}
         </div>
 
-        <div className="text-center mt-12 reveal">
+        <div className={`text-center mt-12 transition-all duration-700 ${isVisible ? 'opacity-100' : 'opacity-0 translate-y-10'}`} style={{ transitionDelay: '600ms' }}>
           <Button 
             asChild 
             size="lg" 
-            className="bg-sudevi-red hover:bg-sudevi-darkRed hover-grow"
+            className="bg-sudevi-red hover:bg-sudevi-darkRed transition-transform hover:scale-105"
           >
             <Link to="/products">View All Products</Link>
           </Button>

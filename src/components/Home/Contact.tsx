@@ -14,7 +14,7 @@ const Contact = () => {
   return (
     <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12 reveal">
+        <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Get In Touch</h2>
           <p className="text-gray-600 max-w-2xl mx-auto">
             Have questions about our products or interested in partnering with us? Reach out to our team.
@@ -22,7 +22,7 @@ const Contact = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <Card className="border-0 shadow-md reveal" style={{ transitionDelay: '100ms' }}>
+          <Card className="border-0 shadow-md">
             <CardHeader className="pb-0 flex items-center justify-center">
               <div className="bg-sudevi-red/10 p-3 rounded-full w-16 h-16 flex items-center justify-center">
                 <Phone className="h-8 w-8 text-sudevi-red" />
@@ -33,14 +33,14 @@ const Contact = () => {
               <p className="text-gray-600 mb-4">Our customer support team is ready to help you</p>
               <a 
                 href="tel:+918260990093" 
-                className="text-sudevi-red font-medium hover-underline"
+                className="text-sudevi-red font-medium hover:underline"
               >
                 +91 8260990093
               </a>
             </CardContent>
           </Card>
 
-          <Card className="border-0 shadow-md reveal" style={{ transitionDelay: '200ms' }}>
+          <Card className="border-0 shadow-md">
             <CardHeader className="pb-0 flex items-center justify-center">
               <div className="bg-sudevi-red/10 p-3 rounded-full w-16 h-16 flex items-center justify-center">
                 <Mail className="h-8 w-8 text-sudevi-red" />
@@ -51,14 +51,14 @@ const Contact = () => {
               <p className="text-gray-600 mb-4">Send us an email and we'll get back to you</p>
               <a 
                 href="mailto:sudevifoods@gmail.com" 
-                className="text-sudevi-red font-medium hover-underline"
+                className="text-sudevi-red font-medium hover:underline"
               >
                 sudevifoods@gmail.com
               </a>
             </CardContent>
           </Card>
 
-          <Card className="border-0 shadow-md reveal" style={{ transitionDelay: '300ms' }}>
+          <Card className="border-0 shadow-md">
             <CardHeader className="pb-0 flex items-center justify-center">
               <div className="bg-sudevi-red/10 p-3 rounded-full w-16 h-16 flex items-center justify-center">
                 <MapPin className="h-8 w-8 text-sudevi-red" />
@@ -75,7 +75,7 @@ const Contact = () => {
         </div>
 
         <div className="mt-12 space-y-8">
-          <div className="rounded-lg overflow-hidden shadow-lg h-64 w-full reveal">
+          <div className="rounded-lg overflow-hidden shadow-lg h-64 w-full">
             <iframe 
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3714.0716833772265!2d86.93404579999999!3d21.482786699999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a1c5ed70f4ccb0d%3A0x54d4ca9456691d95!2sSudevi%20Agro%20Foods%20Pvt.%20Ltd.!5e0!3m2!1sen!2sin!4v1716414302279!5m2!1sen!2sin" 
               width="100%" 
@@ -89,10 +89,10 @@ const Contact = () => {
             ></iframe>
           </div>
           
-          <div className="text-center reveal">
+          <div className="text-center">
             <Dialog>
               <DialogTrigger asChild>
-                <Button size="lg" className="bg-sudevi-red hover:bg-sudevi-darkRed mr-4 hover-grow">
+                <Button size="lg" className="bg-sudevi-red hover:bg-sudevi-darkRed mr-4">
                   Contact Us Now
                 </Button>
               </DialogTrigger>
@@ -107,7 +107,7 @@ const Contact = () => {
               </DialogContent>
             </Dialog>
             
-            <Button asChild size="lg" variant="outline" className="border-sudevi-red text-sudevi-red hover:bg-sudevi-red/10 hover-grow">
+            <Button asChild size="lg" variant="outline" className="border-sudevi-red text-sudevi-red hover:bg-sudevi-red/10">
               <Link to="/contact">View More Details</Link>
             </Button>
           </div>
