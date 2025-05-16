@@ -1,7 +1,9 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Check } from "lucide-react";
+import { Reveal } from "@/hooks/useScrollAnimation";
 
 // Updated product data with real images
 const productCategories = [
@@ -112,6 +114,25 @@ const productCategories = [
 
 const Products = () => {
   const [activeTab, setActiveTab] = useState("pickles");
+  
+  // Add smooth scroll to anchor when URL contains hash
+  useEffect(() => {
+    const hash = window.location.hash.substring(1);
+    if (hash) {
+      setActiveTab(hash);
+      
+      // Smooth scroll to the tabs section
+      setTimeout(() => {
+        const tabsElement = document.getElementById("product-tabs");
+        if (tabsElement) {
+          tabsElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+    }
+    
+    // Reset scroll position on component mount
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
 
   return (
     <>
@@ -120,75 +141,88 @@ const Products = () => {
         <meta name="description" content="Explore Sudevi Agro Foods' range of pickles, spices, soya chunks and vermicelli. Authentic Indian flavors crafted with premium ingredients." />
       </Helmet>
       
-      <div className="bg-gray-50 py-12">
-        <div className="container mx-auto px-4">
-          <h1 className="text-4xl md:text-5xl font-bold text-center mb-6">Our Products</h1>
-          <p className="text-gray-600 text-center max-w-3xl mx-auto">
-            Discover our range of authentic Indian food products made with premium ingredients and traditional recipes.
-          </p>
+      <Reveal direction="down">
+        <div className="bg-gray-50 py-12">
+          <div className="container mx-auto px-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-center mb-6">Our Products</h1>
+            <p className="text-gray-600 text-center max-w-3xl mx-auto">
+              Discover our range of authentic Indian food products made with premium ingredients and traditional recipes.
+            </p>
+          </div>
         </div>
-      </div>
+      </Reveal>
 
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <Tabs defaultValue="pickles" value={activeTab} onValueChange={setActiveTab}>
-            <div className="flex justify-center mb-12">
-              <TabsList className="bg-gray-100 p-1">
-                {productCategories.map((category) => (
-                  <TabsTrigger 
-                    key={category.id} 
-                    value={category.id}
-                    className="px-4 py-2 data-[state=active]:bg-sudevi-red data-[state=active]:text-white"
-                  >
-                    {category.name}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </div>
+          <Tabs 
+            defaultValue="pickles" 
+            value={activeTab} 
+            onValueChange={setActiveTab}
+            id="product-tabs"
+          >
+            <Reveal direction="up">
+              <div className="flex justify-center mb-12">
+                <TabsList className="bg-gray-100 p-1">
+                  {productCategories.map((category) => (
+                    <TabsTrigger 
+                      key={category.id} 
+                      value={category.id}
+                      className="px-4 py-2 data-[state=active]:bg-sudevi-red data-[state=active]:text-white"
+                    >
+                      {category.name}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </div>
+            </Reveal>
             
             {productCategories.map((category) => (
-              <TabsContent key={category.id} value={category.id} className="animate-fade-in">
-                <div className="mb-8">
-                  <h2 className="text-3xl font-bold mb-6 text-center">{category.name}</h2>
-                  <p className="text-gray-600 text-center max-w-3xl mx-auto mb-12">
-                    Explore our range of premium quality {category.name.toLowerCase()}.
-                  </p>
-                </div>
+              <TabsContent key={category.id} value={category.id}>
+                <Reveal direction="up">
+                  <div className="mb-8">
+                    <h2 className="text-3xl font-bold mb-6 text-center">{category.name}</h2>
+                    <p className="text-gray-600 text-center max-w-3xl mx-auto mb-12">
+                      Explore our range of premium quality {category.name.toLowerCase()}.
+                    </p>
+                  </div>
+                </Reveal>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-animation">
                   {category.products.map((product) => (
-                    <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:shadow-lg">
-                      <div className="h-64 bg-gray-100 overflow-hidden">
-                        {product.image ? (
-                          <img 
-                            src={product.image} 
-                            alt={product.name} 
-                            className="w-full h-full object-contain p-4"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-gray-500">
-                            Product Image
-                          </div>
-                        )}
+                    <Reveal key={product.id} direction="up" className="h-full">
+                      <div className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg h-full">
+                        <div className="h-64 bg-gray-100 overflow-hidden">
+                          {product.image ? (
+                            <img 
+                              src={product.image} 
+                              alt={product.name} 
+                              className="w-full h-full object-contain p-4 transition-all duration-500 hover:scale-110"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-gray-500">
+                              Product Image
+                            </div>
+                          )}
+                        </div>
+                        <div className="p-6">
+                          <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
+                          <p className="text-gray-600 mb-4">{product.description}</p>
+                          
+                          {product.features && (
+                            <div className="mt-4">
+                              <ul className="space-y-2">
+                                {product.features.map((feature, index) => (
+                                  <li key={index} className="flex items-center">
+                                    <Check className="h-4 w-4 text-sudevi-red mr-2" />
+                                    <span className="text-sm text-gray-700">{feature}</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <div className="p-6">
-                        <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
-                        <p className="text-gray-600 mb-4">{product.description}</p>
-                        
-                        {product.features && (
-                          <div className="mt-4">
-                            <ul className="space-y-2">
-                              {product.features.map((feature, index) => (
-                                <li key={index} className="flex items-center">
-                                  <Check className="h-4 w-4 text-sudevi-red mr-2" />
-                                  <span className="text-sm text-gray-700">{feature}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
-                      </div>
-                    </div>
+                    </Reveal>
                   ))}
                 </div>
               </TabsContent>

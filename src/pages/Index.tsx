@@ -4,8 +4,14 @@ import Products from "@/components/Home/Products";
 import About from "@/components/Home/About";
 import Contact from "@/components/Home/Contact";
 import { Helmet } from "react-helmet";
+import { useEffect } from "react";
 
 const Index = () => {
+  // Add smooth scrolling behavior on page load
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
   return (
     <>
       <Helmet>
