@@ -1,11 +1,12 @@
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { useAuth } from '@/hooks/useAuth';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { LogOut } from 'lucide-react';
+import { LogOut, AlertCircle } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import LeadsManagement from '@/components/Admin/LeadsManagement';
 import ProductsManagement from '@/components/Admin/ProductsManagement';
 
@@ -13,11 +14,14 @@ const Admin = () => {
   const { user, isAdmin, loading, signOut } = useAuth();
   const navigate = useNavigate();
 
+  console.log('Admin page - user:', user?.email, 'isAdmin:', isAdmin, 'loading:', loading);
+
   useEffect(() => {
-    if (!loading && (!user || !isAdmin)) {
+    if (!loading && !user) {
+      console.log('No user, redirecting to auth');
       navigate('/auth');
     }
-  }, [user, isAdmin, loading, navigate]);
+  }, [user, loading, navigate]);
 
   const handleSignOut = async () => {
     await signOut();
@@ -32,8 +36,54 @@ const Admin = () => {
     );
   }
 
-  if (!user || !isAdmin) {
+  if (!user) {
     return null;
+  }
+
+  if (!isAdmin) {
+    return (
+      <>
+        <Helmet>
+          <title>Access Denied - Sudevi Agro Foods</title>
+          <meta name="robots" content="noindex, nofollow" />
+        </Helmet>
+
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <div className="max-w-md w-full">
+            <Alert className="mb-4">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>
+                You don't have admin access. Please contact the administrator to request access.
+              </AlertDescription>
+            </Alert>
+            
+            <div className="bg-white p-6 rounded-lg shadow-sm">
+              <h1 className="text-xl font-semibold mb-4">Access Denied</h1>
+              <p className="text-gray-600 mb-4">
+                Logged in as: {user.email}
+              </p>
+              <div className="space-y-2">
+                <Button
+                  variant="outline"
+                  onClick={() => navigate('/')}
+                  className="w-full"
+                >
+                  Return to Home
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={handleSignOut}
+                  className="w-full flex items-center justify-center"
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Sign Out
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    );
   }
 
   return (

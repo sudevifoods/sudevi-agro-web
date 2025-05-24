@@ -25,20 +25,32 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        console.log('Auth state changed:', event, session?.user?.email);
         setSession(session);
         setUser(session?.user ?? null);
         
         if (session?.user) {
-          // Check if user is admin
+          // Check if user is admin with a delay to ensure the user_profiles table is ready
           setTimeout(async () => {
-            const { data: profile } = await supabase
-              .from('user_profiles')
-              .select('role')
-              .eq('id', session.user.id)
-              .single();
-            
-            setIsAdmin(profile?.role === 'admin');
-          }, 0);
+            try {
+              const { data: profile, error } = await supabase
+                .from('user_profiles')
+                .select('role')
+                .eq('id', session.user.id)
+                .single();
+              
+              if (error) {
+                console.error('Error fetching user profile:', error);
+                setIsAdmin(false);
+              } else {
+                console.log('User profile:', profile);
+                setIsAdmin(profile?.role === 'admin');
+              }
+            } catch (error) {
+              console.error('Error checking admin status:', error);
+              setIsAdmin(false);
+            }
+          }, 100);
         } else {
           setIsAdmin(false);
         }
@@ -49,8 +61,34 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('Initial session:', session?.user?.email);
       setSession(session);
       setUser(session?.user ?? null);
+      
+      if (session?.user) {
+        // Check admin status for initial session
+        setTimeout(async () => {
+          try {
+            const { data: profile, error } = await supabase
+              .from('user_profiles')
+              .select('role')
+              .eq('id', session.user.id)
+              .single();
+            
+            if (error) {
+              console.error('Error fetching initial user profile:', error);
+              setIsAdmin(false);
+            } else {
+              console.log('Initial user profile:', profile);
+              setIsAdmin(profile?.role === 'admin');
+            }
+          } catch (error) {
+            console.error('Error checking initial admin status:', error);
+            setIsAdmin(false);
+          }
+        }, 100);
+      }
+      
       setLoading(false);
     });
 
@@ -58,23 +96,36 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    return { error };
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      return { error };
+    } catch (error) {
+      return { error };
+    }
   };
 
   const signUp = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
-    return { error };
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+      });
+      return { error };
+    } catch (error) {
+      return { error };
+    }
   };
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    try {
+      await supabase.auth.signOut();
+      setIsAdmin(false);
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
   };
 
   return (
