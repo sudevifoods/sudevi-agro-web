@@ -37,7 +37,14 @@ const LeadsManagement = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setLeads(data || []);
+      
+      // Type assertion to ensure status matches our expected type
+      const typedLeads: Lead[] = (data || []).map(lead => ({
+        ...lead,
+        status: lead.status as Lead['status'] || 'new'
+      }));
+      
+      setLeads(typedLeads);
     } catch (error) {
       console.error('Error fetching leads:', error);
       toast({
