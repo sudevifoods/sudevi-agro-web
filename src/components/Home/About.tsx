@@ -25,7 +25,7 @@ const About = () => {
             <div className="relative">
               <img 
                 src="https://images.unsplash.com/photo-1483478550801-ceba5fe50e8e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" 
-                alt="Food Processing Facility" 
+                alt="Food Processing Facility - Sudevi Agro Foods manufacturing authentic Indian pickles and spices" 
                 className="rounded-lg shadow-xl w-full"
               />
               <div className="absolute -bottom-6 -left-6 bg-sudevi-red text-white p-4 rounded-lg hidden md:block animate-float">

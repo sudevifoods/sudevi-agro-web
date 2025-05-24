@@ -13,8 +13,58 @@ const ContactUs = () => {
   return (
     <>
       <Helmet>
-        <title>Contact Us - Sudevi Agro Foods</title>
-        <meta name="description" content="Get in touch with Sudevi Agro Foods. Contact us for inquiries about our products, partnerships, or any other information." />
+        <title>Contact Sudevi Agro Foods - Get in Touch | Balasore, Odisha</title>
+        <meta name="description" content="Contact Sudevi Agro Foods for inquiries about our premium Indian food products. Located in Balasore, Odisha. Call +91-8260990093 or email sudevifoods@gmail.com" />
+        <meta name="keywords" content="contact Sudevi Agro Foods, food manufacturer contact, Balasore Odisha, Indian food products inquiry, business contact" />
+        <link rel="canonical" href="https://sudevi-agro-foods.lovable.app/contact" />
+        
+        {/* Open Graph */}
+        <meta property="og:title" content="Contact Sudevi Agro Foods - Get in Touch | Balasore, Odisha" />
+        <meta property="og:description" content="Contact Sudevi Agro Foods for inquiries about our premium Indian food products. Located in Balasore, Odisha." />
+        <meta property="og:url" content="https://sudevi-agro-foods.lovable.app/contact" />
+        
+        {/* Twitter */}
+        <meta name="twitter:title" content="Contact Sudevi Agro Foods - Get in Touch | Balasore, Odisha" />
+        <meta name="twitter:description" content="Contact Sudevi Agro Foods for inquiries about our premium Indian food products. Located in Balasore, Odisha." />
+        
+        {/* Local Business Schema */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            "name": "Sudevi Agro Foods Private Limited",
+            "image": "https://sudevi-agro-foods.lovable.app/lovable-uploads/35d4be78-f0f1-4c6a-8bf7-40a140323a71.png",
+            "telephone": "+91-8260990093",
+            "email": "sudevifoods@gmail.com",
+            "address": {
+              "@type": "PostalAddress",
+              "streetAddress": "Plot No:- 1730/2463/9212, AT- Mohammadpur, Badakhua Lane, Sunhat",
+              "addressLocality": "Balasore",
+              "addressRegion": "Odisha",
+              "postalCode": "756002",
+              "addressCountry": "IN"
+            },
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": 21.482787,
+              "longitude": 86.934046
+            },
+            "openingHoursSpecification": [
+              {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+                "opens": "09:00",
+                "closes": "18:00"
+              },
+              {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": "Saturday",
+                "opens": "09:00",
+                "closes": "13:00"
+              }
+            ]
+          })}
+        </script>
       </Helmet>
       
       <Reveal direction="down">
