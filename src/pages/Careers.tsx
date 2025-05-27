@@ -1,39 +1,47 @@
 
+import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { Button } from "@/components/ui/button";
 import JobApplicationForm from "@/components/Forms/JobApplicationForm";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import ContactForm from "@/components/Forms/ContactForm";
+import { supabase } from "@/integrations/supabase/client";
 
-// Sample job openings
-const jobOpenings = [
-  {
-    id: 1,
-    title: "Production Supervisor",
-    department: "Manufacturing",
-    location: "Balasore, Odisha",
-    type: "Full-time",
-    description: "We are looking for an experienced Production Supervisor to oversee our food production operations."
-  },
-  {
-    id: 2,
-    title: "Quality Control Analyst",
-    department: "Quality Assurance",
-    location: "Balasore, Odisha",
-    type: "Full-time",
-    description: "Join our QA team to ensure our products meet the highest quality standards."
-  },
-  {
-    id: 3,
-    title: "Sales Executive",
-    department: "Sales",
-    location: "Balasore, Odisha",
-    type: "Full-time",
-    description: "Looking for energetic sales professionals to expand our market presence."
-  }
-];
+interface JobOpening {
+  id: string;
+  title: string;
+  department: string;
+  location: string;
+  type: string;
+  description: string;
+  requirements: string[];
+  is_active: boolean;
+}
 
 const Careers = () => {
+  const [jobOpenings, setJobOpenings] = useState<JobOpening[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchJobOpenings();
+  }, []);
+
+  const fetchJobOpenings = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('job_openings')
+        .select('*')
+        .eq('is_active', true)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setJobOpenings(data || []);
+    } catch (error) {
+      console.error('Error fetching job openings:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <Helmet>
@@ -81,7 +89,11 @@ const Careers = () => {
           <div>
             <h2 className="text-3xl font-bold mb-6">Current Openings</h2>
             
-            {jobOpenings.length > 0 ? (
+            {loading ? (
+              <div className="bg-white p-8 rounded-lg shadow-md text-center">
+                <p className="text-gray-600">Loading job openings...</p>
+              </div>
+            ) : jobOpenings.length > 0 ? (
               <div className="space-y-6">
                 {jobOpenings.map((job) => (
                   <div key={job.id} className="bg-white p-6 rounded-lg shadow-md">
@@ -98,6 +110,16 @@ const Careers = () => {
                       </span>
                     </div>
                     <p className="text-gray-600 mb-4">{job.description}</p>
+                    {job.requirements && job.requirements.length > 0 && (
+                      <div className="mb-4">
+                        <h4 className="font-semibold mb-2">Requirements:</h4>
+                        <ul className="list-disc list-inside text-gray-600 space-y-1">
+                          {job.requirements.map((req, index) => (
+                            <li key={index}>{req}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                     <JobApplicationForm jobTitle={job.title} />
                   </div>
                 ))}

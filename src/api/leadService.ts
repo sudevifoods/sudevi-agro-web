@@ -7,6 +7,13 @@ interface LeadData {
   phone?: string;
   subject?: string;
   message: string;
+  lead_type?: string;
+  company?: string;
+  position?: string;
+  experience?: string;
+  resume_url?: string;
+  partner_type?: string;
+  location?: string;
 }
 
 export const submitLead = async (leadData: LeadData): Promise<{ success: boolean; message: string }> => {

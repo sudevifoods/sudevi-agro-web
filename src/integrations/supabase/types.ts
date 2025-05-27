@@ -9,38 +9,152 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      leads: {
+      job_openings: {
         Row: {
           created_at: string
-          email: string
+          department: string
+          description: string
           id: string
+          is_active: boolean | null
+          location: string
+          requirements: string[] | null
+          title: string
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          department: string
+          description: string
+          id?: string
+          is_active?: boolean | null
+          location: string
+          requirements?: string[] | null
+          title: string
+          type?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          department?: string
+          description?: string
+          id?: string
+          is_active?: boolean | null
+          location?: string
+          requirements?: string[] | null
+          title?: string
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      lead_types: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      leads: {
+        Row: {
+          company: string | null
+          created_at: string
+          email: string
+          experience: string | null
+          id: string
+          lead_type: string | null
+          location: string | null
           message: string
           name: string
+          partner_type: string | null
           phone: string | null
+          position: string | null
+          resume_url: string | null
           status: string | null
           subject: string | null
           updated_at: string
         }
         Insert: {
+          company?: string | null
           created_at?: string
           email: string
+          experience?: string | null
           id?: string
+          lead_type?: string | null
+          location?: string | null
           message: string
           name: string
+          partner_type?: string | null
           phone?: string | null
+          position?: string | null
+          resume_url?: string | null
           status?: string | null
           subject?: string | null
           updated_at?: string
         }
         Update: {
+          company?: string | null
           created_at?: string
           email?: string
+          experience?: string | null
           id?: string
+          lead_type?: string | null
+          location?: string | null
           message?: string
           name?: string
+          partner_type?: string | null
           phone?: string | null
+          position?: string | null
+          resume_url?: string | null
           status?: string | null
           subject?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      page_content: {
+        Row: {
+          content: Json
+          content_type: string
+          created_at: string
+          id: string
+          is_active: boolean | null
+          page_name: string
+          section_name: string
+          updated_at: string
+        }
+        Insert: {
+          content: Json
+          content_type: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          page_name: string
+          section_name: string
+          updated_at?: string
+        }
+        Update: {
+          content?: Json
+          content_type?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          page_name?: string
+          section_name?: string
           updated_at?: string
         }
         Relationships: []

@@ -9,6 +9,8 @@ import { LogOut, AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import LeadsManagement from '@/components/Admin/LeadsManagement';
 import ProductsManagement from '@/components/Admin/ProductsManagement';
+import ContentManagement from '@/components/Admin/ContentManagement';
+import JobOpeningsManagement from '@/components/Admin/JobOpeningsManagement';
 
 const Admin = () => {
   const { user, isAdmin, loading, signOut } = useAuth();
@@ -120,6 +122,8 @@ const Admin = () => {
             <TabsList className="bg-white">
               <TabsTrigger value="leads">Leads Management</TabsTrigger>
               <TabsTrigger value="products">Products Management</TabsTrigger>
+              <TabsTrigger value="content">Content Management</TabsTrigger>
+              <TabsTrigger value="jobs">Job Openings</TabsTrigger>
             </TabsList>
 
             <TabsContent value="leads">
@@ -128,6 +132,14 @@ const Admin = () => {
 
             <TabsContent value="products">
               <ProductsManagement />
+            </TabsContent>
+
+            <TabsContent value="content">
+              <ContentManagement />
+            </TabsContent>
+
+            <TabsContent value="jobs">
+              <JobOpeningsManagement />
             </TabsContent>
           </Tabs>
         </div>

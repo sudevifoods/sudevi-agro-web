@@ -31,7 +31,10 @@ const ContactForm = ({ submitButtonText = "Send Message", onSuccess }: ContactFo
     setIsSubmitting(true);
     
     try {
-      const result = await submitLead(formData);
+      const result = await submitLead({
+        ...formData,
+        lead_type: 'contact'
+      });
       
       if (result.success) {
         toast({
