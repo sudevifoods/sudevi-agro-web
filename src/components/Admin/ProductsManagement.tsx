@@ -6,7 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/hooks/use-toast';
-import { Plus, Edit, Trash2, Package } from 'lucide-react';
+import { Plus, Edit, Trash2, Package, RefreshCw } from 'lucide-react';
 import ProductForm from './ProductForm';
 import ProductSync from './ProductSync';
 import { syncProductToMySQL } from '@/services/productSyncService';
@@ -26,6 +26,7 @@ interface Product {
 const ProductsManagement = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
@@ -35,6 +36,7 @@ const ProductsManagement = () => {
 
   const fetchProducts = async () => {
     try {
+      setLoading(true);
       const { data, error } = await supabase
         .from('products')
         .select('*')
@@ -42,6 +44,7 @@ const ProductsManagement = () => {
 
       if (error) throw error;
       setProducts(data || []);
+      console.log('Fetched products:', data);
     } catch (error) {
       console.error('Error fetching products:', error);
       toast({
@@ -52,6 +55,16 @@ const ProductsManagement = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await fetchProducts();
+    setRefreshing(false);
+    toast({
+      title: "Success",
+      description: "Products refreshed successfully"
+    });
   };
 
   const handleEdit = (product: Product) => {
@@ -150,13 +163,24 @@ const ProductsManagement = () => {
                 Manage your product catalog and sync with MySQL database
               </CardDescription>
             </div>
-            <Button
-              onClick={() => setShowForm(true)}
-              className="bg-sudevi-red hover:bg-sudevi-darkRed"
-            >
-              <Plus className="h-4 w-4 mr-2" />
-              Add Product
-            </Button>
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleRefresh}
+                disabled={refreshing}
+              >
+                <RefreshCw className={`h-4 w-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
+                Refresh
+              </Button>
+              <Button
+                onClick={() => setShowForm(true)}
+                className="bg-sudevi-red hover:bg-sudevi-darkRed"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add Product
+              </Button>
+            </div>
           </div>
         </CardHeader>
         <CardContent>
@@ -186,6 +210,10 @@ const ProductsManagement = () => {
                               src={product.image_url}
                               alt={product.name}
                               className="h-12 w-12 object-cover rounded"
+                              onError={(e) => {
+                                console.log('Image failed to load:', product.image_url);
+                                e.currentTarget.style.display = 'none';
+                              }}
                             />
                           )}
                           <div>

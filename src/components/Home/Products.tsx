@@ -1,38 +1,118 @@
 
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import { Reveal, useScrollAnimation } from '@/hooks/useScrollAnimation';
+import { supabase } from '@/integrations/supabase/client';
 
-const productCategories = [
-  {
-    id: 1,
-    name: 'Pickles',
-    description: 'Traditional Indian pickles crafted with age-old recipes and premium ingredients.',
-    image: '/lovable-uploads/2dbfb706-0547-4ba1-91f1-aa7f73b59885.png',
-  },
-  {
-    id: 2,
-    name: 'Spices',
-    description: 'Pure, aromatic spices that bring authentic flavors to your cooking.',
-    image: '/lovable-uploads/0cc44a35-9de5-44a5-9024-1e43fc0909d4.png',
-  },
-  {
-    id: 3,
-    name: 'Soya Chunks',
-    description: 'High-protein, nutritious soya chunks perfect for a healthy diet.',
-    image: '/lovable-uploads/d014a63a-1af5-4585-99d3-5fe4ce3cc927.png',
-  },
-  {
-    id: 4,
-    name: 'Vermicelli',
-    description: 'Premium quality vermicelli that makes delicious dishes in minutes.',
-    image: '/lovable-uploads/9373690e-0fa6-46ea-b056-74fc97c8fa7b.png',
-  },
-];
+interface Product {
+  id: string;
+  name: string;
+  description?: string;
+  category: string;
+  image_url?: string;
+}
 
 const Products = () => {
   const { ref, isVisible } = useScrollAnimation({ threshold: 0.1 });
+  const [productCategories, setProductCategories] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchFeaturedProducts();
+  }, []);
+
+  const fetchFeaturedProducts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('is_active', true)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      // Group products by category and take first product from each category
+      const categories = ['pickles', 'spices', 'soya', 'vermicelli'];
+      const categoryData = categories.map(categoryId => {
+        const categoryProducts = data?.filter(product => product.category === categoryId) || [];
+        const featuredProduct = categoryProducts[0]; // Take the first product as featured
+        
+        return {
+          id: categoryId,
+          name: categoryId.charAt(0).toUpperCase() + categoryId.slice(1),
+          description: getCategoryDescription(categoryId),
+          image: featuredProduct?.image_url || getDefaultImage(categoryId),
+        };
+      });
+
+      setProductCategories(categoryData);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      // Fallback to default data if fetch fails
+      setProductCategories(getDefaultCategories());
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getCategoryDescription = (category: string) => {
+    const descriptions = {
+      pickles: 'Traditional Indian pickles crafted with age-old recipes and premium ingredients.',
+      spices: 'Pure, aromatic spices that bring authentic flavors to your cooking.',
+      soya: 'High-protein, nutritious soya chunks perfect for a healthy diet.',
+      vermicelli: 'Premium quality vermicelli that makes delicious dishes in minutes.',
+    };
+    return descriptions[category as keyof typeof descriptions] || '';
+  };
+
+  const getDefaultImage = (category: string) => {
+    const images = {
+      pickles: '/lovable-uploads/2dbfb706-0547-4ba1-91f1-aa7f73b59885.png',
+      spices: '/lovable-uploads/0cc44a35-9de5-44a5-9024-1e43fc0909d4.png',
+      soya: '/lovable-uploads/d014a63a-1af5-4585-99d3-5fe4ce3cc927.png',
+      vermicelli: '/lovable-uploads/9373690e-0fa6-46ea-b056-74fc97c8fa7b.png',
+    };
+    return images[category as keyof typeof images] || '';
+  };
+
+  const getDefaultCategories = () => [
+    {
+      id: 'pickles',
+      name: 'Pickles',
+      description: 'Traditional Indian pickles crafted with age-old recipes and premium ingredients.',
+      image: '/lovable-uploads/2dbfb706-0547-4ba1-91f1-aa7f73b59885.png',
+    },
+    {
+      id: 'spices',
+      name: 'Spices',
+      description: 'Pure, aromatic spices that bring authentic flavors to your cooking.',
+      image: '/lovable-uploads/0cc44a35-9de5-44a5-9024-1e43fc0909d4.png',
+    },
+    {
+      id: 'soya',
+      name: 'Soya Chunks',
+      description: 'High-protein, nutritious soya chunks perfect for a healthy diet.',
+      image: '/lovable-uploads/d014a63a-1af5-4585-99d3-5fe4ce3cc927.png',
+    },
+    {
+      id: 'vermicelli',
+      name: 'Vermicelli',
+      description: 'Premium quality vermicelli that makes delicious dishes in minutes.',
+      image: '/lovable-uploads/9373690e-0fa6-46ea-b056-74fc97c8fa7b.png',
+    },
+  ];
+
+  if (loading) {
+    return (
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center">Loading products...</div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-16 bg-gray-50">
