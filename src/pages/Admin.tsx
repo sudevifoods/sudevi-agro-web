@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
@@ -11,6 +10,8 @@ import LeadsManagement from '@/components/Admin/LeadsManagement';
 import ProductsManagement from '@/components/Admin/ProductsManagement';
 import ContentManagement from '@/components/Admin/ContentManagement';
 import JobOpeningsManagement from '@/components/Admin/JobOpeningsManagement';
+import SEOManagement from '@/components/Admin/SEOManagement';
+import GoogleMerchantCenter from '@/components/Admin/GoogleMerchantCenter';
 
 const Admin = () => {
   const { user, isAdmin, loading, signOut } = useAuth();
@@ -124,6 +125,8 @@ const Admin = () => {
               <TabsTrigger value="products">Products Management</TabsTrigger>
               <TabsTrigger value="content">Content Management</TabsTrigger>
               <TabsTrigger value="jobs">Job Openings</TabsTrigger>
+              <TabsTrigger value="seo">SEO Optimization</TabsTrigger>
+              <TabsTrigger value="gmc">Google Merchant</TabsTrigger>
             </TabsList>
 
             <TabsContent value="leads">
@@ -140,6 +143,14 @@ const Admin = () => {
 
             <TabsContent value="jobs">
               <JobOpeningsManagement />
+            </TabsContent>
+
+            <TabsContent value="seo">
+              <SEOManagement />
+            </TabsContent>
+
+            <TabsContent value="gmc">
+              <GoogleMerchantCenter />
             </TabsContent>
           </Tabs>
         </div>
