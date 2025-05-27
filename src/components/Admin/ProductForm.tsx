@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/hooks/use-toast';
-import { ArrowLeft, Upload } from 'lucide-react';
+import { ArrowLeft, Upload, X } from 'lucide-react';
 
 interface Product {
   id: string;
@@ -24,7 +24,7 @@ interface Product {
 
 interface ProductFormProps {
   product?: Product | null;
-  onSuccess: () => void;
+  onSuccess: (productData?: any) => void;
   onCancel: () => void;
 }
 
@@ -38,26 +38,50 @@ const ProductForm = ({ product, onSuccess, onCancel }: ProductFormProps) => {
     is_active: product?.is_active ?? true,
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(product?.image_url || null);
   const [loading, setLoading] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   const categories = ['pickles', 'spices', 'soya', 'vermicelli'];
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setImageFile(e.target.files[0]);
+      const file = e.target.files[0];
+      setImageFile(file);
+      
+      // Create preview URL
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl);
+    }
+  };
+
+  const removeImage = () => {
+    setImageFile(null);
+    setImagePreview(null);
+    // Reset the file input
+    const fileInput = document.getElementById('image') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
     }
   };
 
   const uploadImage = async (file: File): Promise<string | null> => {
+    setUploadingImage(true);
     try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Date.now()}.${fileExt}`;
+      const fileExt = file.name.split('.').pop()?.toLowerCase();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
       
       const { error: uploadError } = await supabase.storage
         .from('product-images')
-        .upload(fileName, file);
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        console.error('Upload error:', uploadError);
+        throw uploadError;
+      }
 
       const { data } = supabase.storage
         .from('product-images')
@@ -67,6 +91,8 @@ const ProductForm = ({ product, onSuccess, onCancel }: ProductFormProps) => {
     } catch (error) {
       console.error('Error uploading image:', error);
       return null;
+    } finally {
+      setUploadingImage(false);
     }
   };
 
@@ -77,9 +103,10 @@ const ProductForm = ({ product, onSuccess, onCancel }: ProductFormProps) => {
     try {
       let imageUrl = product?.image_url;
 
+      // Upload new image if selected
       if (imageFile) {
-        imageUrl = await uploadImage(imageFile);
-        if (!imageUrl) {
+        const uploadedUrl = await uploadImage(imageFile);
+        if (!uploadedUrl) {
           toast({
             title: "Error",
             description: "Failed to upload image",
@@ -87,6 +114,10 @@ const ProductForm = ({ product, onSuccess, onCancel }: ProductFormProps) => {
           });
           return;
         }
+        imageUrl = uploadedUrl;
+      } else if (!imagePreview) {
+        // If no preview and no existing image, set to null
+        imageUrl = null;
       }
 
       const productData = {
@@ -95,7 +126,7 @@ const ProductForm = ({ product, onSuccess, onCancel }: ProductFormProps) => {
         category: formData.category,
         price: formData.price ? parseFloat(formData.price) : null,
         image_url: imageUrl,
-        features: formData.features ? formData.features.split(',').map(f => f.trim()) : [],
+        features: formData.features ? formData.features.split(',').map(f => f.trim()).filter(f => f) : [],
         is_active: formData.is_active,
       };
 
@@ -124,7 +155,8 @@ const ProductForm = ({ product, onSuccess, onCancel }: ProductFormProps) => {
         });
       }
 
-      onSuccess();
+      // Pass the product data for auto-sync
+      onSuccess(productData);
     } catch (error) {
       console.error('Error saving product:', error);
       toast({
@@ -235,33 +267,46 @@ const ProductForm = ({ product, onSuccess, onCancel }: ProductFormProps) => {
 
               <div>
                 <Label htmlFor="image">Product Image</Label>
-                <div className="mt-1">
-                  <input
-                    id="image"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    className="hidden"
-                  />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => document.getElementById('image')?.click()}
-                    className="w-full"
-                  >
-                    <Upload className="h-4 w-4 mr-2" />
-                    {imageFile ? imageFile.name : 'Choose Image'}
-                  </Button>
-                </div>
-                {product?.image_url && !imageFile && (
-                  <div className="mt-2">
-                    <img
-                      src={product.image_url}
-                      alt="Current product image"
-                      className="h-20 w-20 object-cover rounded"
+                <div className="mt-1 space-y-3">
+                  {imagePreview && (
+                    <div className="relative inline-block">
+                      <img
+                        src={imagePreview}
+                        alt="Product preview"
+                        className="h-32 w-32 object-cover rounded-lg border"
+                      />
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="sm"
+                        className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0"
+                        onClick={removeImage}
+                      >
+                        <X className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  )}
+                  
+                  <div>
+                    <input
+                      id="image"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      className="hidden"
                     />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => document.getElementById('image')?.click()}
+                      disabled={uploadingImage}
+                      className="w-full"
+                    >
+                      <Upload className="h-4 w-4 mr-2" />
+                      {uploadingImage ? 'Uploading...' : imageFile ? 'Change Image' : 'Choose Image'}
+                    </Button>
                   </div>
-                )}
+                </div>
               </div>
             </div>
           </div>
@@ -272,7 +317,7 @@ const ProductForm = ({ product, onSuccess, onCancel }: ProductFormProps) => {
             </Button>
             <Button
               type="submit"
-              disabled={loading}
+              disabled={loading || uploadingImage}
               className="bg-sudevi-red hover:bg-sudevi-darkRed"
             >
               {loading ? 'Saving...' : (product ? 'Update Product' : 'Create Product')}
