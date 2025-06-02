@@ -52,7 +52,7 @@ const SEOManagement = () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
-        .from('seo_settings' as any)
+        .from('seo_settings')
         .select('*')
         .order('page_path');
 
@@ -100,7 +100,7 @@ const SEOManagement = () => {
     try {
       if (editingId) {
         const { error } = await supabase
-          .from('seo_settings' as any)
+          .from('seo_settings')
           .update(formData)
           .eq('id', editingId);
 
@@ -111,7 +111,7 @@ const SEOManagement = () => {
         });
       } else {
         const { error } = await supabase
-          .from('seo_settings' as any)
+          .from('seo_settings')
           .insert([formData]);
 
         if (error) throw error;

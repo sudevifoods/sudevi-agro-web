@@ -67,7 +67,7 @@ const GoogleMerchantCenter = () => {
   const fetchSettings = async () => {
     try {
       const { data, error } = await supabase
-        .from('gmc_settings' as any)
+        .from('gmc_settings')
         .select('*')
         .limit(1)
         .maybeSingle();
@@ -75,7 +75,7 @@ const GoogleMerchantCenter = () => {
       if (error && error.code !== 'PGRST116') throw error;
       
       if (data) {
-        setSettings(data as GMCSettings);
+        setSettings(data);
         setFormData({
           merchant_id: data.merchant_id,
           feed_url: data.feed_url,
@@ -129,14 +129,14 @@ const GoogleMerchantCenter = () => {
     try {
       if (settings) {
         const { error } = await supabase
-          .from('gmc_settings' as any)
+          .from('gmc_settings')
           .update(formData)
           .eq('id', settings.id);
 
         if (error) throw error;
       } else {
         const { error } = await supabase
-          .from('gmc_settings' as any)
+          .from('gmc_settings')
           .insert([formData]);
 
         if (error) throw error;
@@ -216,7 +216,7 @@ ${product.gtin ? `<g:gtin>${product.gtin}</g:gtin>` : ''}
       
       if (settings) {
         await supabase
-          .from('gmc_settings' as any)
+          .from('gmc_settings')
           .update({ last_sync: new Date().toISOString() })
           .eq('id', settings.id);
       }

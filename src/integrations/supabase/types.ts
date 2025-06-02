@@ -9,6 +9,57 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      gmc_settings: {
+        Row: {
+          auto_sync: boolean
+          brand: string
+          country: string
+          created_at: string
+          currency: string
+          feed_format: string
+          feed_url: string | null
+          id: string
+          is_active: boolean
+          language: string
+          last_sync: string | null
+          merchant_id: string
+          sync_frequency: string
+          updated_at: string
+        }
+        Insert: {
+          auto_sync?: boolean
+          brand?: string
+          country?: string
+          created_at?: string
+          currency?: string
+          feed_format?: string
+          feed_url?: string | null
+          id?: string
+          is_active?: boolean
+          language?: string
+          last_sync?: string | null
+          merchant_id: string
+          sync_frequency?: string
+          updated_at?: string
+        }
+        Update: {
+          auto_sync?: boolean
+          brand?: string
+          country?: string
+          created_at?: string
+          currency?: string
+          feed_format?: string
+          feed_url?: string | null
+          id?: string
+          is_active?: boolean
+          language?: string
+          last_sync?: string | null
+          merchant_id?: string
+          sync_frequency?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       job_openings: {
         Row: {
           created_at: string
@@ -197,6 +248,54 @@ export type Database = {
           name?: string
           nutritional_info?: Json | null
           price?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      seo_settings: {
+        Row: {
+          canonical_url: string | null
+          created_at: string
+          description: string
+          id: string
+          is_active: boolean
+          keywords: string | null
+          og_description: string | null
+          og_image: string | null
+          og_title: string | null
+          page_path: string
+          robots: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          canonical_url?: string | null
+          created_at?: string
+          description: string
+          id?: string
+          is_active?: boolean
+          keywords?: string | null
+          og_description?: string | null
+          og_image?: string | null
+          og_title?: string | null
+          page_path: string
+          robots?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          canonical_url?: string | null
+          created_at?: string
+          description?: string
+          id?: string
+          is_active?: boolean
+          keywords?: string | null
+          og_description?: string | null
+          og_image?: string | null
+          og_title?: string | null
+          page_path?: string
+          robots?: string
+          title?: string
           updated_at?: string
         }
         Relationships: []
