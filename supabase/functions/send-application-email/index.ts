@@ -101,11 +101,10 @@ const handler = async (req: Request): Promise<Response> => {
 
     let subject: string;
     let html: string;
-    let recipientEmail: string;
+    const recipientEmail = 'inquiry@sudevifoods.com';
 
     if (type === 'job') {
       subject = `New Job Application - ${data.jobTitle || 'General Application'}`;
-      recipientEmail = 'hr@sudeviagrofoods.com'; // Change to your HR email
       
       html = `
         <h2>New Job Application Received</h2>
@@ -121,7 +120,6 @@ const handler = async (req: Request): Promise<Response> => {
       `;
     } else if (type === 'partner') {
       subject = `New Partnership Application - ${data.partnerType}`;
-      recipientEmail = 'partnerships@sudeviagrofoods.com'; // Change to your partnerships email
       
       html = `
         <h2>New Partnership Application Received</h2>
