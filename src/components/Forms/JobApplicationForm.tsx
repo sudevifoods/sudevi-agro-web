@@ -1,10 +1,10 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { sendJobApplicationEmail } from "@/services/emailService";
 
 interface JobApplicationFormProps {
   jobTitle?: string;
@@ -38,14 +38,23 @@ const JobApplicationForm = ({ jobTitle }: JobApplicationFormProps) => {
     setIsSubmitting(true);
     
     try {
-      // In a real implementation with Firebase, you would send the data to Firebase here
-      // For now we'll simulate a successful submission
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      toast({
-        title: "Application submitted successfully",
-        description: "Thank you for your application! We will review it and get back to you soon."
+      // Send email notification
+      const emailResult = await sendJobApplicationEmail({
+        ...formData,
+        jobTitle: jobTitle || "General Application"
       });
+
+      if (emailResult.success) {
+        toast({
+          title: "Application submitted successfully",
+          description: "Thank you for your application! We will review it and get back to you soon."
+        });
+      } else {
+        toast({
+          title: "Application submitted",
+          description: "Your application has been submitted, but we couldn't send a notification email."
+        });
+      }
       
       setFormData({
         name: "",
@@ -58,6 +67,7 @@ const JobApplicationForm = ({ jobTitle }: JobApplicationFormProps) => {
       
       setIsOpen(false);
     } catch (error) {
+      console.error('Error submitting application:', error);
       toast({
         title: "Error",
         description: "There was a problem submitting your application. Please try again.",

@@ -1,9 +1,9 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
+import { sendPartnerApplicationEmail } from "@/services/emailService";
 
 interface PartnerFormProps {
   onSuccess?: () => void;
@@ -31,14 +31,20 @@ const PartnerForm = ({ onSuccess }: PartnerFormProps) => {
     setIsSubmitting(true);
     
     try {
-      // In a real implementation with Firebase, you would send the data to Firebase here
-      // For now we'll simulate a successful submission
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      toast({
-        title: "Partnership application submitted",
-        description: "Thank you for your interest! We will review your application and get back to you soon."
-      });
+      // Send email notification
+      const emailResult = await sendPartnerApplicationEmail(formData);
+
+      if (emailResult.success) {
+        toast({
+          title: "Partnership application submitted",
+          description: "Thank you for your interest! We will review your application and get back to you soon."
+        });
+      } else {
+        toast({
+          title: "Application submitted",
+          description: "Your application has been submitted, but we couldn't send a notification email."
+        });
+      }
       
       setFormData({
         company: "",
@@ -54,6 +60,7 @@ const PartnerForm = ({ onSuccess }: PartnerFormProps) => {
         onSuccess();
       }
     } catch (error) {
+      console.error('Error submitting partnership application:', error);
       toast({
         title: "Error",
         description: "There was a problem submitting your application. Please try again.",
