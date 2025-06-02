@@ -28,64 +28,138 @@ const sendEmail = async (to: string, subject: string, html: string) => {
   const smtpUser = Deno.env.get('SMTP_USER');
   const smtpPass = Deno.env.get('SMTP_PASS');
 
-  console.log('SMTP Config:', { host: smtpHost, port: smtpPort, user: smtpUser });
+  console.log('SMTP Config:', { 
+    host: smtpHost, 
+    port: smtpPort, 
+    user: smtpUser,
+    hasPassword: !!smtpPass 
+  });
 
   if (!smtpHost || !smtpPort || !smtpUser || !smtpPass) {
-    throw new Error('SMTP configuration is incomplete');
+    throw new Error('SMTP configuration is incomplete. Missing: ' + 
+      [
+        !smtpHost && 'SMTP_HOST',
+        !smtpPort && 'SMTP_PORT', 
+        !smtpUser && 'SMTP_USER',
+        !smtpPass && 'SMTP_PASS'
+      ].filter(Boolean).join(', '));
   }
 
-  // Create email content in RFC 2822 format
-  const emailContent = [
-    `From: ${smtpUser}`,
-    `To: ${to}`,
-    `Subject: ${subject}`,
-    `Content-Type: text/html; charset=utf-8`,
-    ``,
-    html
-  ].join('\r\n');
-
-  // Connect to SMTP server using raw TCP
   try {
-    const conn = await Deno.connect({
-      hostname: smtpHost,
-      port: parseInt(smtpPort),
-    });
-
-    const encoder = new TextEncoder();
-    const decoder = new TextDecoder();
-
-    // Helper function to read response
-    const readResponse = async () => {
-      const buffer = new Uint8Array(1024);
-      const n = await conn.read(buffer);
-      return decoder.decode(buffer.subarray(0, n || 0));
-    };
-
-    // Helper function to send command
-    const sendCommand = async (command: string) => {
-      await conn.write(encoder.encode(command + '\r\n'));
-      return await readResponse();
-    };
-
-    // SMTP conversation
-    await readResponse(); // Initial greeting
-    await sendCommand(`EHLO ${smtpHost}`);
-    await sendCommand('STARTTLS');
+    console.log(`Attempting to connect to SMTP server: ${smtpHost}:${smtpPort}`);
     
-    // For simplicity, we'll use AUTH PLAIN
-    const auth = btoa(`\0${smtpUser}\0${smtpPass}`);
-    await sendCommand('AUTH PLAIN ' + auth);
-    
-    await sendCommand(`MAIL FROM:<${smtpUser}>`);
-    await sendCommand(`RCPT TO:<${to}>`);
-    await sendCommand('DATA');
-    await sendCommand(emailContent + '\r\n.');
-    await sendCommand('QUIT');
+    // For port 465 (SSL), we need a different approach
+    if (smtpPort === '465') {
+      // Use TLS connection for port 465
+      const conn = await Deno.connectTls({
+        hostname: smtpHost,
+        port: parseInt(smtpPort),
+      });
 
-    conn.close();
-    console.log('Email sent successfully');
+      const encoder = new TextEncoder();
+      const decoder = new TextDecoder();
+
+      // Helper function to read response
+      const readResponse = async () => {
+        const buffer = new Uint8Array(4096);
+        const n = await conn.read(buffer);
+        const response = decoder.decode(buffer.subarray(0, n || 0));
+        console.log('SMTP Response:', response);
+        return response;
+      };
+
+      // Helper function to send command
+      const sendCommand = async (command: string) => {
+        console.log('SMTP Command:', command.replace(smtpPass, '***'));
+        await conn.write(encoder.encode(command + '\r\n'));
+        return await readResponse();
+      };
+
+      // SMTP conversation for SSL connection
+      await readResponse(); // Initial greeting
+      
+      await sendCommand(`EHLO ${smtpHost}`);
+      
+      // For SSL connections, we don't need STARTTLS
+      const auth = btoa(`\0${smtpUser}\0${smtpPass}`);
+      await sendCommand('AUTH PLAIN ' + auth);
+      
+      await sendCommand(`MAIL FROM:<${smtpUser}>`);
+      await sendCommand(`RCPT TO:<${to}>`);
+      await sendCommand('DATA');
+      
+      // Send email content
+      const emailContent = [
+        `From: ${smtpUser}`,
+        `To: ${to}`,
+        `Subject: ${subject}`,
+        `Content-Type: text/html; charset=utf-8`,
+        ``,
+        html
+      ].join('\r\n');
+      
+      await sendCommand(emailContent + '\r\n.');
+      await sendCommand('QUIT');
+
+      conn.close();
+      console.log('Email sent successfully via SSL');
+    } else {
+      // Original implementation for non-SSL ports
+      const conn = await Deno.connect({
+        hostname: smtpHost,
+        port: parseInt(smtpPort),
+      });
+
+      const encoder = new TextEncoder();
+      const decoder = new TextDecoder();
+
+      const readResponse = async () => {
+        const buffer = new Uint8Array(4096);
+        const n = await conn.read(buffer);
+        const response = decoder.decode(buffer.subarray(0, n || 0));
+        console.log('SMTP Response:', response);
+        return response;
+      };
+
+      const sendCommand = async (command: string) => {
+        console.log('SMTP Command:', command.replace(smtpPass, '***'));
+        await conn.write(encoder.encode(command + '\r\n'));
+        return await readResponse();
+      };
+
+      await readResponse(); // Initial greeting
+      await sendCommand(`EHLO ${smtpHost}`);
+      await sendCommand('STARTTLS');
+      
+      const auth = btoa(`\0${smtpUser}\0${smtpPass}`);
+      await sendCommand('AUTH PLAIN ' + auth);
+      
+      await sendCommand(`MAIL FROM:<${smtpUser}>`);
+      await sendCommand(`RCPT TO:<${to}>`);
+      await sendCommand('DATA');
+      
+      const emailContent = [
+        `From: ${smtpUser}`,
+        `To: ${to}`,
+        `Subject: ${subject}`,
+        `Content-Type: text/html; charset=utf-8`,
+        ``,
+        html
+      ].join('\r\n');
+      
+      await sendCommand(emailContent + '\r\n.');
+      await sendCommand('QUIT');
+
+      conn.close();
+      console.log('Email sent successfully via STARTTLS');
+    }
   } catch (error) {
-    console.error('SMTP Error:', error);
+    console.error('SMTP Error details:', {
+      message: error.message,
+      stack: error.stack,
+      host: smtpHost,
+      port: smtpPort
+    });
     throw new Error(`Failed to send email: ${error.message}`);
   }
 };
@@ -97,7 +171,7 @@ const handler = async (req: Request): Promise<Response> => {
 
   try {
     const { type, data }: EmailRequest = await req.json();
-    console.log('Received email request:', { type, data });
+    console.log('Received email request:', { type, data: { ...data, email: '***' } });
 
     let subject: string;
     let html: string;
@@ -151,9 +225,16 @@ const handler = async (req: Request): Promise<Response> => {
       }
     );
   } catch (error: any) {
-    console.error('Error in send-application-email function:', error);
+    console.error('Error in send-application-email function:', {
+      message: error.message,
+      stack: error.stack
+    });
     return new Response(
-      JSON.stringify({ success: false, error: error.message }),
+      JSON.stringify({ 
+        success: false, 
+        error: error.message,
+        details: 'Check function logs for more details'
+      }),
       {
         status: 500,
         headers: {
