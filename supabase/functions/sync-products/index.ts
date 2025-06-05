@@ -1,6 +1,7 @@
 
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { Client } from "https://deno.land/x/mysql@v2.12.1/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -18,8 +19,7 @@ interface ProductData {
   is_active: boolean;
 }
 
-// Simple MySQL connection using fetch for HTTP-based MySQL proxy
-const executeMySQLQuery = async (query: string, params: any[] = []) => {
+const createMySQLConnection = async () => {
   const mysqlHost = Deno.env.get('MYSQL_HOST');
   const mysqlUser = Deno.env.get('MYSQL_USER');
   const mysqlPassword = Deno.env.get('MYSQL_PASSWORD');
@@ -38,24 +38,32 @@ const executeMySQLQuery = async (query: string, params: any[] = []) => {
     throw new Error('Missing MySQL configuration. Please check MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, and MYSQL_DATABASE secrets.');
   }
 
-  // For now, we'll simulate the MySQL operations and log what would be executed
-  // This is because direct MySQL connections from edge functions can be problematic
-  console.log('Would execute MySQL query:', query);
-  console.log('With parameters:', params);
-  
-  // Return a simulated successful result
-  return {
-    affectedRows: 1,
-    insertId: null,
-    rows: []
-  };
+  try {
+    const client = await new Client().connect({
+      hostname: mysqlHost,
+      username: mysqlUser,
+      password: mysqlPassword,
+      db: mysqlDatabase,
+      port: parseInt(mysqlPort),
+    });
+
+    console.log('Successfully connected to MySQL database');
+    return client;
+  } catch (error) {
+    console.error('Failed to connect to MySQL:', error);
+    throw new Error(`MySQL connection failed: ${error.message}`);
+  }
 };
 
 const syncProductToMySQL = async (product: ProductData) => {
+  let client;
+  
   try {
     console.log('Starting MySQL sync for product:', product.name);
     
-    // Create table query (would be executed)
+    client = await createMySQLConnection();
+    
+    // Create table if it doesn't exist
     const createTableQuery = `
       CREATE TABLE IF NOT EXISTS products (
         id VARCHAR(36) PRIMARY KEY,
@@ -72,7 +80,7 @@ const syncProductToMySQL = async (product: ProductData) => {
     `;
     
     console.log('Creating/checking products table...');
-    await executeMySQLQuery(createTableQuery);
+    await client.execute(createTableQuery);
     
     // Insert/Update product
     const productId = product.id || crypto.randomUUID();
@@ -103,46 +111,60 @@ const syncProductToMySQL = async (product: ProductData) => {
     ];
     
     console.log('Executing product upsert...');
-    const result = await executeMySQLQuery(upsertQuery, params);
+    console.log('Query:', upsertQuery);
+    console.log('Parameters:', params);
+    
+    const result = await client.execute(upsertQuery, params);
     
     console.log('Product sync completed successfully');
     return { 
       success: true, 
-      message: 'Product synced to MySQL successfully (simulated)',
+      message: 'Product synced to MySQL successfully',
       productId,
-      affectedRows: result.affectedRows 
+      affectedRows: result.affectedRows || 1
     };
   } catch (error) {
     console.error('Error syncing product to MySQL:', error);
     throw error;
+  } finally {
+    if (client) {
+      try {
+        await client.close();
+        console.log('MySQL connection closed');
+      } catch (closeError) {
+        console.error('Error closing MySQL connection:', closeError);
+      }
+    }
   }
 };
 
 const getProductsFromMySQL = async () => {
+  let client;
+  
   try {
     console.log('Fetching products from MySQL...');
     
-    // Simulate fetching products
-    const mockProducts = [
-      {
-        id: '1',
-        name: 'Sample Product 1',
-        description: 'This is a sample product',
-        category: 'sample',
-        price: 100,
-        image_url: null,
-        features: '["feature1", "feature2"]',
-        is_active: true,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      }
-    ];
+    client = await createMySQLConnection();
     
-    console.log('Fetched products from MySQL (simulated):', mockProducts.length, 'products');
-    return mockProducts;
+    const query = 'SELECT * FROM products ORDER BY created_at DESC';
+    const result = await client.execute(query);
+    
+    const products = result.rows || [];
+    
+    console.log('Fetched products from MySQL:', products.length, 'products');
+    return products;
   } catch (error) {
     console.error('Error fetching products from MySQL:', error);
     throw error;
+  } finally {
+    if (client) {
+      try {
+        await client.close();
+        console.log('MySQL connection closed');
+      } catch (closeError) {
+        console.error('Error closing MySQL connection:', closeError);
+      }
+    }
   }
 };
 
@@ -169,9 +191,8 @@ serve(async (req) => {
       return new Response(
         JSON.stringify({ 
           success: true, 
-          message: 'Product synced to MySQL successfully (simulated mode)', 
-          result,
-          note: 'Currently running in simulation mode due to network connectivity limitations'
+          message: 'Product synced to MySQL successfully', 
+          result
         }),
         {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -189,8 +210,7 @@ serve(async (req) => {
         JSON.stringify({ 
           success: true, 
           products,
-          count: products.length,
-          note: 'Currently running in simulation mode due to network connectivity limitations'
+          count: products.length
         }),
         {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -213,8 +233,7 @@ serve(async (req) => {
       JSON.stringify({ 
         success: false, 
         error: error.message,
-        details: error.stack,
-        suggestion: 'The MySQL server may not be accessible from Supabase edge functions. Consider using a MySQL proxy service or alternative connection method.'
+        details: error.stack
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
