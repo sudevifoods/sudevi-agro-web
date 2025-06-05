@@ -1,6 +1,7 @@
 
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { Client } from "https://deno.land/x/mysql@v2.12.1/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -18,13 +19,13 @@ interface ProductData {
   is_active: boolean;
 }
 
-// Simple MySQL connection using fetch API instead of MySQL driver
-const executeMySQLQuery = async (query: string, params: any[] = []) => {
+// Create MySQL connection
+const createMySQLConnection = async () => {
   const mysqlHost = Deno.env.get('MYSQL_HOST');
   const mysqlUser = Deno.env.get('MYSQL_USER');
   const mysqlPassword = Deno.env.get('MYSQL_PASSWORD');
   const mysqlDatabase = Deno.env.get('MYSQL_DATABASE');
-  const mysqlPort = Deno.env.get('MYSQL_PORT') || '3306';
+  const mysqlPort = parseInt(Deno.env.get('MYSQL_PORT') || '3306');
 
   console.log('MySQL connection details:', {
     host: mysqlHost,
@@ -38,23 +39,25 @@ const executeMySQLQuery = async (query: string, params: any[] = []) => {
     throw new Error('Missing MySQL configuration. Please check MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, and MYSQL_DATABASE secrets.');
   }
 
-  // For now, we'll simulate the MySQL operation and log it
-  // In a real implementation, you would use a proper MySQL client or API
-  console.log('Would execute MySQL query:', query, 'with params:', params);
-  
-  // Return a mock success response
-  return { 
-    success: true, 
-    message: 'MySQL operation simulated successfully',
-    affectedRows: 1 
-  };
+  const client = await new Client().connect({
+    hostname: mysqlHost,
+    username: mysqlUser,
+    password: mysqlPassword,
+    db: mysqlDatabase,
+    port: mysqlPort,
+  });
+
+  return client;
 };
 
 const syncProductToMySQL = async (product: ProductData) => {
+  let client;
   try {
-    console.log('Syncing product to MySQL:', product.name);
+    console.log('Connecting to MySQL for product sync:', product.name);
     
-    // Create table query (would be executed in real MySQL)
+    client = await createMySQLConnection();
+    
+    // Create table if it doesn't exist
     const createTableQuery = `
       CREATE TABLE IF NOT EXISTS products (
         id VARCHAR(36) PRIMARY KEY,
@@ -70,9 +73,11 @@ const syncProductToMySQL = async (product: ProductData) => {
       )
     `;
     
-    await executeMySQLQuery(createTableQuery);
+    console.log('Creating products table if not exists...');
+    await client.execute(createTableQuery);
     
-    // Insert/Update product query
+    // Insert/Update product
+    const productId = product.id || crypto.randomUUID();
     const upsertQuery = `
       INSERT INTO products (id, name, description, category, price, image_url, features, is_active)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
@@ -87,48 +92,69 @@ const syncProductToMySQL = async (product: ProductData) => {
       updated_at = CURRENT_TIMESTAMP
     `;
     
-    const params = [
-      product.id || crypto.randomUUID(),
+    const featuresJson = product.features ? JSON.stringify(product.features) : null;
+    
+    console.log('Executing product upsert for:', product.name);
+    const result = await client.execute(upsertQuery, [
+      productId,
       product.name,
       product.description || null,
       product.category,
       product.price || null,
       product.image_url || null,
-      product.features ? JSON.stringify(product.features) : null,
+      featuresJson,
       product.is_active
-    ];
+    ]);
     
-    const result = await executeMySQLQuery(upsertQuery, params);
     console.log('Product synced successfully:', result);
-    return result;
+    return { 
+      success: true, 
+      message: 'Product synced to MySQL successfully',
+      productId,
+      affectedRows: result.affectedRows 
+    };
   } catch (error) {
     console.error('Error syncing product to MySQL:', error);
     throw error;
+  } finally {
+    if (client) {
+      await client.close();
+    }
   }
 };
 
 const getProductsFromMySQL = async () => {
+  let client;
   try {
-    console.log('Fetching products from MySQL...');
+    console.log('Connecting to MySQL to fetch products...');
     
-    const result = await executeMySQLQuery('SELECT * FROM products ORDER BY created_at DESC');
-    console.log('Fetched products from MySQL');
+    client = await createMySQLConnection();
     
-    // Return mock data for now
-    return [
-      {
-        id: 1,
-        name: 'Mock Product',
-        description: 'This is a mock product from MySQL simulation',
-        category: 'pickles',
-        price: 99.99,
-        is_active: true,
-        created_at: new Date().toISOString()
-      }
-    ];
+    // Check if table exists first
+    const tableExistsQuery = `
+      SELECT COUNT(*) as count 
+      FROM information_schema.tables 
+      WHERE table_schema = ? AND table_name = 'products'
+    `;
+    
+    const tableCheck = await client.execute(tableExistsQuery, [Deno.env.get('MYSQL_DATABASE')]);
+    
+    if (tableCheck.rows?.[0]?.count === 0) {
+      console.log('Products table does not exist yet');
+      return [];
+    }
+    
+    const result = await client.execute('SELECT * FROM products ORDER BY created_at DESC');
+    console.log('Fetched products from MySQL:', result.rows?.length || 0, 'products');
+    
+    return result.rows || [];
   } catch (error) {
     console.error('Error fetching products from MySQL:', error);
     throw error;
+  } finally {
+    if (client) {
+      await client.close();
+    }
   }
 };
 
@@ -155,9 +181,8 @@ serve(async (req) => {
       return new Response(
         JSON.stringify({ 
           success: true, 
-          message: 'Product synced to MySQL', 
-          result,
-          note: 'Currently using MySQL simulation. Configure proper MySQL connection for production use.'
+          message: 'Product synced to MySQL successfully', 
+          result
         }),
         {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -175,7 +200,7 @@ serve(async (req) => {
         JSON.stringify({ 
           success: true, 
           products,
-          note: 'Currently using MySQL simulation. Configure proper MySQL connection for production use.'
+          count: products.length
         }),
         {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -199,7 +224,7 @@ serve(async (req) => {
         success: false, 
         error: error.message,
         details: error.stack,
-        suggestion: 'Please check your MySQL configuration secrets: MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE'
+        suggestion: 'Please check your MySQL configuration secrets and network connectivity'
       }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
