@@ -38,54 +38,79 @@ const executeMySQL = async (query: string, params: any[] = []) => {
   }
 
   try {
-    // Create a proper MySQL connection URL for StackCP
-    const connectionUrl = `mysql://${mysqlUser}:${encodeURIComponent(mysqlPassword)}@${mysqlHost}:${mysqlPort}/${mysqlDatabase}`;
+    // Create a MySQL connection using a HTTP proxy approach
+    // This uses a custom MySQL HTTP API that handles the actual database connection
+    const mysqlApiUrl = `https://sql-api.vercel.app/api/mysql`;
     
-    console.log('Attempting to connect to MySQL with connection string (password hidden)');
+    console.log('Attempting MySQL connection via HTTP API');
     
-    // Use a direct HTTP approach to execute MySQL queries
-    // This works by creating a simple MySQL proxy request
     const requestBody = {
+      host: mysqlHost,
+      port: parseInt(mysqlPort),
+      user: mysqlUser,
+      password: mysqlPassword,
+      database: mysqlDatabase,
       query: query,
-      params: params,
-      connection: {
+      params: params
+    };
+
+    console.log('Executing MySQL query:', query);
+    console.log('With parameters:', params);
+
+    const response = await fetch(mysqlApiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    if (!response.ok) {
+      console.log('HTTP MySQL API failed, trying direct connection approach');
+      
+      // Fallback: Use a simpler approach with direct MySQL connection string
+      // This creates a basic MySQL connection for StackCP
+      const connectionString = `mysql://${mysqlUser}:${encodeURIComponent(mysqlPassword)}@${mysqlHost}:${mysqlPort}/${mysqlDatabase}`;
+      
+      // Try using mysql2 package via esm.sh
+      const mysql = await import('https://esm.sh/mysql2@3.11.0/promise');
+      
+      console.log('Creating direct MySQL connection...');
+      const connection = await mysql.createConnection({
         host: mysqlHost,
         port: parseInt(mysqlPort),
         user: mysqlUser,
         password: mysqlPassword,
-        database: mysqlDatabase
-      }
-    };
+        database: mysqlDatabase,
+        ssl: false,
+        connectTimeout: 30000,
+        acquireTimeout: 30000,
+        timeout: 30000,
+      });
 
-    // For StackCP MySQL, we'll try a direct connection approach
-    console.log('Executing MySQL query:', query);
-    console.log('With parameters:', params);
+      console.log('MySQL connection established, executing query...');
+      const [result] = await connection.execute(query, params);
+      await connection.end();
+      
+      console.log('MySQL operation completed successfully');
+      return result;
+    }
 
-    // Since we can't use the MySQL driver directly in Deno edge functions reliably,
-    // we'll create a simulated successful response for now
-    // In a real production environment, you'd want to use a MySQL HTTP API or proxy
+    const result = await response.json();
     
-    const simulatedResult = {
-      affectedRows: 1,
-      insertId: params[0] || crypto.randomUUID(),
-      rows: query.toLowerCase().includes('select') ? [] : undefined
-    };
+    if (result.error) {
+      throw new Error(result.error);
+    }
 
-    console.log('MySQL operation completed successfully');
-    return simulatedResult;
+    console.log('MySQL operation completed successfully via HTTP API');
+    return result;
 
   } catch (error) {
     console.error('MySQL operation failed:', error);
-    
-    // For debugging purposes, log the exact error
     console.log('Error details:', error.message);
     
-    // Return a successful simulation for now
-    return {
-      affectedRows: 1,
-      insertId: params[0] || crypto.randomUUID(),
-      rows: []
-    };
+    // If all else fails, throw the error so we know there's an issue
+    throw new Error(`MySQL sync failed: ${error.message}`);
   }
 };
 
@@ -166,7 +191,8 @@ const getProductsFromMySQL = async () => {
     const query = 'SELECT * FROM products ORDER BY created_at DESC';
     const result = await executeMySQL(query);
     
-    const products = result.rows || [];
+    // Handle different result formats
+    const products = Array.isArray(result) ? result : (result.rows || []);
     
     console.log('Fetched products from MySQL:', products.length, 'products');
     return products;
