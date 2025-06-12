@@ -2,7 +2,8 @@
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Check, ShoppingCart } from "lucide-react";
 import { Reveal } from "@/hooks/useScrollAnimation";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -15,6 +16,7 @@ interface Product {
   image_url?: string;
   features?: string[];
   is_active: boolean;
+  shop_link?: string;
 }
 
 const Products = () => {
@@ -155,7 +157,7 @@ const Products = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-animation">
                     {category.products.map((product) => (
                       <Reveal key={product.id} direction="up" className="h-full">
-                        <div className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg h-full">
+                        <div className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg h-full flex flex-col">
                           <div className="h-64 bg-gray-100 overflow-hidden">
                             {product.image_url ? (
                               <img 
@@ -169,12 +171,12 @@ const Products = () => {
                               </div>
                             )}
                           </div>
-                          <div className="p-6">
+                          <div className="p-6 flex-1 flex flex-col">
                             <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
                             <p className="text-gray-600 mb-4">{product.description}</p>
                             
                             {product.features && product.features.length > 0 && (
-                              <div className="mt-4">
+                              <div className="mt-4 flex-1">
                                 <ul className="space-y-2">
                                   {product.features.map((feature, index) => (
                                     <li key={index} className="flex items-center">
@@ -186,11 +188,31 @@ const Products = () => {
                               </div>
                             )}
 
-                            {product.price && (
-                              <div className="mt-4 text-lg font-semibold text-sudevi-red">
-                                ₹{product.price}
-                              </div>
-                            )}
+                            <div className="mt-4 flex items-center justify-between">
+                              {product.price && (
+                                <div className="text-lg font-semibold text-sudevi-red">
+                                  ₹{product.price}
+                                </div>
+                              )}
+                              
+                              {product.shop_link && (
+                                <Button
+                                  asChild
+                                  className="bg-sudevi-red hover:bg-sudevi-darkRed ml-auto"
+                                  size="sm"
+                                >
+                                  <a 
+                                    href={product.shop_link} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="flex items-center"
+                                  >
+                                    <ShoppingCart className="h-4 w-4 mr-2" />
+                                    Shop Now
+                                  </a>
+                                </Button>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </Reveal>
