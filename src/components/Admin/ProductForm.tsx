@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -20,6 +19,7 @@ interface Product {
   image_url?: string;
   features?: string[];
   is_active: boolean;
+  shop_link?: string;
 }
 
 interface ProductFormProps {
@@ -35,6 +35,7 @@ const ProductForm = ({ product, onSuccess, onCancel }: ProductFormProps) => {
     category: product?.category || '',
     price: product?.price?.toString() || '',
     features: product?.features?.join(', ') || '',
+    shop_link: product?.shop_link || '',
     is_active: product?.is_active ?? true,
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -127,6 +128,7 @@ const ProductForm = ({ product, onSuccess, onCancel }: ProductFormProps) => {
         price: formData.price ? parseFloat(formData.price) : null,
         image_url: imageUrl,
         features: formData.features ? formData.features.split(',').map(f => f.trim()).filter(f => f) : [],
+        shop_link: formData.shop_link || null,
         is_active: formData.is_active,
       };
 
@@ -229,6 +231,17 @@ const ProductForm = ({ product, onSuccess, onCancel }: ProductFormProps) => {
                   value={formData.price}
                   onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                   placeholder="Optional"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="shop_link">Shop Link (URL)</Label>
+                <Input
+                  id="shop_link"
+                  type="url"
+                  value={formData.shop_link}
+                  onChange={(e) => setFormData({ ...formData, shop_link: e.target.value })}
+                  placeholder="https://example.com/shop/product"
                 />
               </div>
 
