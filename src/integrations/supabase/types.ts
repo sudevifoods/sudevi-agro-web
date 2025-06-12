@@ -222,6 +222,7 @@ export type Database = {
           name: string
           nutritional_info: Json | null
           price: number | null
+          shop_link: string | null
           updated_at: string
         }
         Insert: {
@@ -235,6 +236,7 @@ export type Database = {
           name: string
           nutritional_info?: Json | null
           price?: number | null
+          shop_link?: string | null
           updated_at?: string
         }
         Update: {
@@ -248,6 +250,7 @@ export type Database = {
           name?: string
           nutritional_info?: Json | null
           price?: number | null
+          shop_link?: string | null
           updated_at?: string
         }
         Relationships: []

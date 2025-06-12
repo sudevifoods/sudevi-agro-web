@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,7 +8,9 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/hooks/use-toast';
-import { ShoppingCart, Download, Upload, Settings, ExternalLink, RefreshCw } from 'lucide-react';
+import { ShoppingCart, Download, Upload, Settings, ExternalLink, RefreshCw, AlertCircle } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { syncProductsToGMC, prepareProductsForGMC } from '@/services/gmcSyncService';
 
 interface GMCSettings {
   id: string;
@@ -211,27 +212,39 @@ ${product.gtin ? `<g:gtin>${product.gtin}</g:gtin>` : ''}
   const handleSyncToGMC = async () => {
     setSyncing(true);
     try {
-      // Simulate API call to Google Merchant Center
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      if (settings) {
-        await supabase
-          .from('gmc_settings')
-          .update({ last_sync: new Date().toISOString() })
-          .eq('id', settings.id);
+      if (!settings) {
+        throw new Error('GMC settings not configured');
       }
 
+      if (!settings.merchant_id) {
+        throw new Error('Merchant ID is required for GMC sync');
+      }
+
+      // Prepare products for GMC
+      const gmcProducts = prepareProductsForGMC(products, formData.brand);
+      
+      console.log('Syncing', gmcProducts.length, 'products to GMC');
+      
+      const result = await syncProductsToGMC(gmcProducts, {
+        id: settings.id,
+        merchant_id: settings.merchant_id,
+        currency: formData.currency,
+        country: formData.country,
+        language: formData.language,
+        brand: formData.brand
+      });
+
       toast({
-        title: "Success",
-        description: "Products synced to Google Merchant Center successfully"
+        title: "Sync Complete",
+        description: `Successfully synced ${result.syncedCount} products to Google Merchant Center. ${result.errorCount} errors.`
       });
       
       await fetchSettings();
     } catch (error) {
       console.error('Error syncing to GMC:', error);
       toast({
-        title: "Error",
-        description: "Failed to sync products to Google Merchant Center",
+        title: "Sync Failed",
+        description: error.message || "Failed to sync products to Google Merchant Center",
         variant: "destructive"
       });
     } finally {
@@ -251,6 +264,15 @@ ${product.gtin ? `<g:gtin>${product.gtin}</g:gtin>` : ''}
 
   return (
     <div className="space-y-6">
+      {/* Configuration Alert */}
+      <Alert>
+        <AlertCircle className="h-4 w-4" />
+        <AlertDescription>
+          <strong>Important:</strong> To sync products to Google Merchant Center, you need to configure your Google Merchant Center API key in the Supabase Edge Function secrets. 
+          Contact your administrator to set up the GOOGLE_MERCHANT_API_KEY secret.
+        </AlertDescription>
+      </Alert>
+
       {/* Settings Card */}
       <Card>
         <CardHeader>
