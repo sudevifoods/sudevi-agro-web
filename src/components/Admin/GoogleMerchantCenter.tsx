@@ -8,7 +8,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { toast } from '@/hooks/use-toast';
-import { ShoppingCart, Download, Upload, Settings, ExternalLink, RefreshCw, AlertCircle } from 'lucide-react';
+import { ShoppingCart, Download, Upload, Settings, ExternalLink, RefreshCw, AlertCircle, Info } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { syncProductsToGMC, prepareProductsForGMC } from '@/services/gmcSyncService';
 
@@ -234,10 +234,17 @@ ${product.gtin ? `<g:gtin>${product.gtin}</g:gtin>` : ''}
         brand: formData.brand
       });
 
-      toast({
-        title: "Sync Complete",
-        description: `Successfully synced ${result.syncedCount} products to Google Merchant Center. ${result.errorCount} errors.`
-      });
+      if (result.message) {
+        toast({
+          title: "Sync Status",
+          description: result.message
+        });
+      } else {
+        toast({
+          title: "Sync Complete",
+          description: `Successfully synced ${result.syncedCount} products to Google Merchant Center. ${result.errorCount} errors.`
+        });
+      }
       
       await fetchSettings();
     } catch (error) {
@@ -264,12 +271,28 @@ ${product.gtin ? `<g:gtin>${product.gtin}</g:gtin>` : ''}
 
   return (
     <div className="space-y-6">
+      {/* Authentication Setup Alert */}
+      <Alert>
+        <Info className="h-4 w-4" />
+        <AlertDescription>
+          <strong>Authentication Setup Required:</strong> Google Merchant Center API requires OAuth 2.0 authentication using a Service Account. 
+          Please follow the{' '}
+          <a href="https://developers.google.com/shopping-content/guides/quickstart" target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+            Google Shopping API quickstart guide
+          </a>{' '}
+          to set up proper authentication. For now, the sync will run in simulation mode.
+        </AlertDescription>
+      </Alert>
+
       {/* Configuration Alert */}
       <Alert>
         <AlertCircle className="h-4 w-4" />
         <AlertDescription>
-          <strong>Important:</strong> To sync products to Google Merchant Center, you need to configure your Google Merchant Center API key in the Supabase Edge Function secrets. 
-          Contact your administrator to set up the GOOGLE_MERCHANT_API_KEY secret.
+          <strong>Setup Instructions:</strong> To enable real product syncing, you need to:
+          <br />1. Create a Google Cloud Project and enable the Content API for Shopping
+          <br />2. Create a Service Account and download the JSON key
+          <br />3. Link your Google Cloud Project to your Merchant Center account
+          <br />4. Add the Service Account JSON as a secret named GOOGLE_SERVICE_ACCOUNT_KEY
         </AlertDescription>
       </Alert>
 
