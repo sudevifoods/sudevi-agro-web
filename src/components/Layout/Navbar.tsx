@@ -21,6 +21,7 @@ const Navbar = () => {
     { name: 'Home', path: '/' },
     { name: 'About Us', path: '/about' },
     { name: 'Products', path: '/products' },
+    { name: 'Recipes', path: '/recipes' },
     { name: 'Careers', path: '/careers' },
     { name: 'Partner With Us', path: '/partners' },
     { name: 'Contact Us', path: '/contact' }
@@ -39,7 +40,7 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden lg:flex items-center space-x-6">
             {navItems.map(item => (
               <Link 
                 key={item.path} 
@@ -86,7 +87,7 @@ const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <button 
-            className="md:hidden text-gray-700 hover:text-sudevi-red" 
+            className="lg:hidden text-gray-700 hover:text-sudevi-red" 
             onClick={toggleMenu}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -96,7 +97,7 @@ const Navbar = () => {
 
       {/* Mobile Navigation */}
       {isMenuOpen && (
-        <nav className="md:hidden bg-white border-t">
+        <nav className="lg:hidden bg-white border-t">
           <div className="container mx-auto px-4 py-3">
             <div className="flex flex-col space-y-3">
               {navItems.map(item => (
