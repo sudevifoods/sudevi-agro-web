@@ -15,6 +15,8 @@ import spiceAsset from "@/assets/whole-spices.png.asset.json";
 import mixedPickleAsset from "@/assets/mixed-pickle.png.asset.json";
 import sweetBerryAsset from "@/assets/sweet-berry-pickle.png.asset.json";
 
+const assetUrl = (path: string) => `https://sudevi-agro-web.lovable.app${path}`;
+
 type Recipe = {
   id: string;
   title: string;
@@ -37,7 +39,7 @@ const recipes: Recipe[] = [
     time: "35 min",
     servings: "4 servings",
     level: "Easy",
-    image: soyaAsset.url,
+    image: assetUrl(soyaAsset.url),
     imageAlt: "Sudevi Soya Chunks packet",
     introduction: "A wholesome one-pot pulao with tender soya chunks, fragrant rice and colourful vegetables.",
     ingredients: ["1 cup basmati rice", "1 cup Sudevi Soya Chunks", "1 onion, sliced", "1 cup mixed vegetables", "1 tsp ginger-garlic paste", "2 cups water", "Whole spices, salt and oil"],
@@ -50,7 +52,7 @@ const recipes: Recipe[] = [
     time: "25 min",
     servings: "3 servings",
     level: "Easy",
-    image: pastaAsset.url,
+    image: assetUrl(pastaAsset.url),
     imageAlt: "Sudevi Pasta Vermicelli packet",
     introduction: "A quick, savoury breakfast made with roasted vermicelli, crisp vegetables and gentle spices.",
     ingredients: ["2 cups Sudevi Vermicelli", "1 onion, finely chopped", "1 tomato, chopped", "1 cup mixed vegetables", "1 tsp mustard seeds", "8 curry leaves", "3 cups hot water", "Salt, lemon and oil"],
@@ -63,7 +65,7 @@ const recipes: Recipe[] = [
     time: "30 min",
     servings: "3 servings",
     level: "Easy",
-    image: pastaAsset.url,
+    image: assetUrl(pastaAsset.url),
     imageAlt: "Sudevi Pasta Vermicelli packet",
     introduction: "Comforting pasta tossed in a bright, lightly spiced tomato masala for an Indian-style family meal.",
     ingredients: ["250 g Sudevi Pasta", "2 tomatoes, puréed", "1 onion, chopped", "1 capsicum, diced", "1 tsp ginger-garlic paste", "½ tsp chilli powder", "½ tsp garam masala", "Salt, oil and coriander"],
@@ -76,7 +78,7 @@ const recipes: Recipe[] = [
     time: "25 min",
     servings: "4 servings",
     level: "Easy",
-    image: spiceAsset.url,
+    image: assetUrl(spiceAsset.url),
     imageAlt: "Sudevi Whole Spices packet",
     introduction: "Fluffy basmati rice perfumed with cumin and whole spices—a versatile partner for dal or curry.",
     ingredients: ["1½ cups basmati rice", "2 tsp Sudevi cumin seeds", "1 bay leaf", "1 cinnamon stick", "3 cloves", "2 green cardamoms", "3 cups water", "Ghee and salt"],
@@ -89,7 +91,7 @@ const recipes: Recipe[] = [
     time: "30 min",
     servings: "4 parathas",
     level: "Easy",
-    image: mixedPickleAsset.url,
+    image: assetUrl(mixedPickleAsset.url),
     imageAlt: "Sudevi Mix Pickle jar",
     introduction: "Tangy, spicy parathas with Sudevi Mix Pickle folded through a simple potato filling.",
     ingredients: ["2 cups whole-wheat flour", "2 boiled potatoes", "2 tbsp Sudevi Mix Pickle, finely chopped", "½ tsp roasted cumin powder", "Fresh coriander", "Salt, water and ghee"],
@@ -102,7 +104,7 @@ const recipes: Recipe[] = [
     time: "15 min",
     servings: "2 servings",
     level: "Quick",
-    image: sweetBerryAsset.url,
+    image: assetUrl(sweetBerryAsset.url),
     imageAlt: "Sudevi Sweet Berry pickle jar",
     introduction: "A clever sweet-and-tangy rice bowl that turns leftover rice into a lively, quick lunch.",
     ingredients: ["2 cups cooked rice", "2 tbsp Sudevi Sweet Berry Pickle", "2 tbsp roasted peanuts", "1 tsp mustard seeds", "6 curry leaves", "1 green chilli, sliced", "Salt and oil"],
@@ -148,8 +150,8 @@ const Recipes = () => {
           </div>
           <div className="relative mx-auto flex h-[300px] w-full max-w-[520px] items-end justify-center md:h-[360px]">
             <div className="absolute bottom-3 h-20 w-4/5 rounded-[50%] bg-foreground/10 blur-xl" />
-            <img src={soyaAsset.url} alt="Sudevi Soya Chunks" className="relative z-10 h-full w-auto object-contain drop-shadow-2xl" />
-            <img src={mixedPickleAsset.url} alt="Sudevi Mix Pickle" className="absolute bottom-0 right-0 z-20 h-[62%] w-auto object-contain drop-shadow-xl" />
+            <img src={assetUrl(soyaAsset.url)} alt="Sudevi Soya Chunks" className="relative z-10 h-full w-auto object-contain drop-shadow-2xl" />
+            <img src={assetUrl(mixedPickleAsset.url)} alt="Sudevi Mix Pickle" className="absolute bottom-0 right-0 z-20 h-[62%] w-auto object-contain drop-shadow-xl" />
           </div>
         </div>
       </section>
