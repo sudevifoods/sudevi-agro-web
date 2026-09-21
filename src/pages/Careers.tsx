@@ -15,6 +15,7 @@ interface JobOpening {
   description: string;
   requirements: string[];
   is_active: boolean;
+  created_at?: string;
 }
 
 const Careers = () => {
@@ -47,7 +48,8 @@ const Careers = () => {
     "@type": "JobPosting",
     title: job.title,
     description: [job.description, ...job.requirements].filter(Boolean).join(" "),
-    employmentType: job.type,
+    ...(job.created_at ? { datePosted: job.created_at.slice(0, 10) } : {}),
+    employmentType: job.type.toUpperCase().replace(/[ -]+/g, "_"),
     hiringOrganization: {
       "@type": "Organization",
       name: "Sudevi Agro Foods Private Limited",
