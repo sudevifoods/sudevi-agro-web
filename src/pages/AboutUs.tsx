@@ -9,6 +9,13 @@ const AboutUs = () => {
       <Helmet>
         <title>About Us - Sudevi Agro Foods</title>
         <meta name="description" content="Learn about Sudevi Agro Foods - our history, mission, values, and the team behind our authentic Indian food products." />
+        <link rel="canonical" href="https://sudevi-agro-web.lovable.app/about" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="About Sudevi Agro Foods | Our Story & Values" />
+        <meta property="og:description" content="Meet the team preserving authentic Indian flavours through quality food products made in Balasore, Odisha." />
+        <meta property="og:url" content="https://sudevi-agro-web.lovable.app/about" />
+        <meta name="twitter:title" content="About Sudevi Agro Foods | Our Story & Values" />
+        <meta name="twitter:description" content="Meet the team preserving authentic Indian flavours through quality food products made in Balasore, Odisha." />
       </Helmet>
       
       <div className="bg-gray-50 py-12">
