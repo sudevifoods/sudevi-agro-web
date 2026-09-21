@@ -7,6 +7,13 @@ const Privacy = () => {
       <Helmet>
         <title>Privacy Policy - Sudevi Agro Foods</title>
         <meta name="description" content="Sudevi Agro Foods Privacy Policy. Learn how we collect, use, and protect your personal information." />
+        <link rel="canonical" href="https://sudevi-agro-web.lovable.app/privacy" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Privacy Policy | Sudevi Agro Foods" />
+        <meta property="og:description" content="Learn how Sudevi Agro Foods collects, uses, stores, and protects personal information." />
+        <meta property="og:url" content="https://sudevi-agro-web.lovable.app/privacy" />
+        <meta name="twitter:title" content="Privacy Policy | Sudevi Agro Foods" />
+        <meta name="twitter:description" content="Learn how Sudevi Agro Foods collects, uses, stores, and protects personal information." />
       </Helmet>
       
       <div className="bg-gray-50 py-12">

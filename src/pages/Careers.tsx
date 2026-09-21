@@ -15,6 +15,7 @@ interface JobOpening {
   description: string;
   requirements: string[];
   is_active: boolean;
+  created_at?: string;
 }
 
 const Careers = () => {
@@ -42,11 +43,49 @@ const Careers = () => {
     }
   };
 
+  const jobSchemas = jobOpenings.map((job) => ({
+    "@context": "https://schema.org",
+    "@type": "JobPosting",
+    title: job.title,
+    description: [job.description, ...job.requirements].filter(Boolean).join(" "),
+    ...(job.created_at ? { datePosted: job.created_at.slice(0, 10) } : {}),
+    employmentType: job.type.toUpperCase().replace(/[ -]+/g, "_"),
+    hiringOrganization: {
+      "@type": "Organization",
+      name: "Sudevi Agro Foods Private Limited",
+      sameAs: "https://sudevi-agro-web.lovable.app/",
+      logo: "https://sudevi-agro-web.lovable.app/lovable-uploads/35d4be78-f0f1-4c6a-8bf7-40a140323a71.png",
+    },
+    jobLocation: {
+      "@type": "Place",
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: job.location,
+        addressRegion: "Odisha",
+        addressCountry: "IN",
+      },
+    },
+    industry: "Food manufacturing",
+    url: `https://sudevi-agro-web.lovable.app/careers#job-${job.id}`,
+  }));
+
   return (
     <>
       <Helmet>
         <title>Careers - Sudevi Agro Foods</title>
         <meta name="description" content="Join Sudevi Agro Foods. Explore career opportunities and be part of our journey in bringing traditional flavors to modern tables." />
+        <link rel="canonical" href="https://sudevi-agro-web.lovable.app/careers" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Careers at Sudevi Agro Foods" />
+        <meta property="og:description" content="Explore current openings and build your career with Sudevi Agro Foods in Balasore, Odisha." />
+        <meta property="og:url" content="https://sudevi-agro-web.lovable.app/careers" />
+        <meta name="twitter:title" content="Careers at Sudevi Agro Foods" />
+        <meta name="twitter:description" content="Explore current openings and build your career with Sudevi Agro Foods in Balasore, Odisha." />
+        {jobSchemas.map((schema, index) => (
+          <script key={`job-schema-${jobOpenings[index]?.id || index}`} type="application/ld+json">
+            {JSON.stringify(schema)}
+          </script>
+        ))}
       </Helmet>
       
       <div className="bg-gray-50 py-12">
@@ -96,7 +135,7 @@ const Careers = () => {
             ) : jobOpenings.length > 0 ? (
               <div className="space-y-6">
                 {jobOpenings.map((job) => (
-                  <div key={job.id} className="bg-white p-6 rounded-lg shadow-md">
+                  <div key={job.id} id={`job-${job.id}`} className="bg-white p-6 rounded-lg shadow-md">
                     <h3 className="text-xl font-semibold mb-2">{job.title}</h3>
                     <div className="flex flex-wrap gap-4 mb-4">
                       <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">

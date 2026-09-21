@@ -56,6 +56,38 @@ const Products = () => {
     products: products.filter(product => product.category === category.id)
   }));
 
+  const productListSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Sudevi Agro Foods product range",
+    url: "https://sudevi-agro-web.lovable.app/products",
+    numberOfItems: products.length,
+    itemListElement: products.map((product, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "Product",
+        name: product.name,
+        description: product.description || undefined,
+        image: product.image_url || undefined,
+        category: product.category,
+        brand: { "@type": "Brand", name: "Sudevi" },
+        url: product.shop_link || "https://sudevi-agro-web.lovable.app/products",
+        ...(product.price
+          ? {
+              offers: {
+                "@type": "Offer",
+                price: product.price,
+                priceCurrency: "INR",
+                availability: "https://schema.org/InStock",
+                url: product.shop_link || "https://sudevi-agro-web.lovable.app/products",
+              },
+            }
+          : {}),
+      },
+    })),
+  };
+
   // Add smooth scroll to anchor when URL contains hash
   useEffect(() => {
     const hash = window.location.hash.substring(1);
@@ -89,18 +121,19 @@ const Products = () => {
         <title>Premium Indian Food Products - Pickles, Spices & More | Sudevi Agro Foods</title>
         <meta name="description" content="Explore Sudevi Agro Foods' premium range of Indian pickles, organic spices, soya chunks and vermicelli. Authentic flavors crafted with traditional recipes and natural ingredients in Balasore, Odisha." />
         <meta name="keywords" content="Indian pickles, mango pickle, mix pickle, green chilli pickle, organic spices, cumin powder, turmeric powder, soya chunks, wheat vermicelli, food products, Balasore" />
-        <link rel="canonical" href="https://sudevi-agro-foods.lovable.app/products" />
+        <link rel="canonical" href="https://sudevi-agro-web.lovable.app/products" />
         
         {/* Open Graph */}
         <meta property="og:title" content="Premium Indian Food Products - Pickles, Spices & More | Sudevi Agro Foods" />
         <meta property="og:description" content="Explore Sudevi Agro Foods' premium range of Indian pickles, organic spices, soya chunks and vermicelli. Authentic flavors crafted with traditional recipes." />
-        <meta property="og:url" content="https://sudevi-agro-foods.lovable.app/products" />
-        <meta property="og:image" content="https://sudevi-agro-foods.lovable.app/lovable-uploads/2dbfb706-0547-4ba1-91f1-aa7f73b59885.png" />
+        <meta property="og:url" content="https://sudevi-agro-web.lovable.app/products" />
+        <meta property="og:image" content="https://sudevi-agro-web.lovable.app/sudevi-social-preview.jpg" />
         
         {/* Twitter */}
         <meta name="twitter:title" content="Premium Indian Food Products - Pickles, Spices & More | Sudevi Agro Foods" />
         <meta name="twitter:description" content="Explore Sudevi Agro Foods' premium range of Indian pickles, organic spices, soya chunks and vermicelli." />
-        <meta name="twitter:image" content="https://sudevi-agro-foods.lovable.app/lovable-uploads/2dbfb706-0547-4ba1-91f1-aa7f73b59885.png" />
+        <meta name="twitter:image" content="https://sudevi-agro-web.lovable.app/sudevi-social-preview.jpg" />
+        <script type="application/ld+json">{JSON.stringify(productListSchema)}</script>
       </Helmet>
       
       <Reveal direction="down">

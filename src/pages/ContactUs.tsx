@@ -16,12 +16,12 @@ const ContactUs = () => {
         <title>Contact Sudevi Agro Foods - Get in Touch | Balasore, Odisha</title>
         <meta name="description" content="Contact Sudevi Agro Foods for inquiries about our premium Indian food products. Located in Balasore, Odisha. Call +91-8260990093 or email sudevifoods@gmail.com" />
         <meta name="keywords" content="contact Sudevi Agro Foods, food manufacturer contact, Balasore Odisha, Indian food products inquiry, business contact" />
-        <link rel="canonical" href="https://sudevi-agro-foods.lovable.app/contact" />
+        <link rel="canonical" href="https://sudevi-agro-web.lovable.app/contact" />
         
         {/* Open Graph */}
         <meta property="og:title" content="Contact Sudevi Agro Foods - Get in Touch | Balasore, Odisha" />
         <meta property="og:description" content="Contact Sudevi Agro Foods for inquiries about our premium Indian food products. Located in Balasore, Odisha." />
-        <meta property="og:url" content="https://sudevi-agro-foods.lovable.app/contact" />
+        <meta property="og:url" content="https://sudevi-agro-web.lovable.app/contact" />
         
         {/* Twitter */}
         <meta name="twitter:title" content="Contact Sudevi Agro Foods - Get in Touch | Balasore, Odisha" />
@@ -33,7 +33,7 @@ const ContactUs = () => {
             "@context": "https://schema.org",
             "@type": "LocalBusiness",
             "name": "Sudevi Agro Foods Private Limited",
-            "image": "https://sudevi-agro-foods.lovable.app/lovable-uploads/35d4be78-f0f1-4c6a-8bf7-40a140323a71.png",
+            "image": "https://sudevi-agro-web.lovable.app/lovable-uploads/35d4be78-f0f1-4c6a-8bf7-40a140323a71.png",
             "telephone": "+91-8260990093",
             "email": "sudevifoods@gmail.com",
             "address": {

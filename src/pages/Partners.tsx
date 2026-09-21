@@ -10,6 +10,13 @@ const Partners = () => {
       <Helmet>
         <title>Partner With Us - Sudevi Agro Foods</title>
         <meta name="description" content="Explore partnership opportunities with Sudevi Agro Foods. Become a distributor, retailer, or supplier and grow with us." />
+        <link rel="canonical" href="https://sudevi-agro-web.lovable.app/partners" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Partner With Sudevi Agro Foods" />
+        <meta property="og:description" content="Join Sudevi Agro Foods as a distributor, retailer, or supplier and grow with our authentic Indian food range." />
+        <meta property="og:url" content="https://sudevi-agro-web.lovable.app/partners" />
+        <meta name="twitter:title" content="Partner With Sudevi Agro Foods" />
+        <meta name="twitter:description" content="Join Sudevi Agro Foods as a distributor, retailer, or supplier and grow with our authentic Indian food range." />
       </Helmet>
       
       <div className="bg-gray-50 py-12">

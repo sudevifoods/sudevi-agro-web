@@ -128,11 +128,11 @@ const Recipes = () => {
       <Helmet>
         <title>Easy Indian Recipes with Soya, Vermicelli, Pasta & Spices | Sudevi Foods</title>
         <meta name="description" content="Cook easy Indian recipes using Sudevi soya chunks, vermicelli, pasta, whole spices and pickles. Find ingredients, preparation times and simple steps." />
-        <link rel="canonical" href="https://sudevifoods.com/recipes" />
+        <link rel="canonical" href="https://sudevi-agro-web.lovable.app/recipes" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Sudevi Kitchen Recipes" />
         <meta property="og:description" content="Everyday recipes made simple with Sudevi foods." />
-        <meta property="og:url" content="https://sudevifoods.com/recipes" />
+        <meta property="og:url" content="https://sudevi-agro-web.lovable.app/recipes" />
         <meta name="twitter:card" content="summary_large_image" />
       </Helmet>
 

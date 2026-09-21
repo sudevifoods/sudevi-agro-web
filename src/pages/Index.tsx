@@ -21,23 +21,23 @@ const Index = () => {
         <meta name="author" content="Sudevi Agro Foods Private Limited" />
         <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="canonical" href="https://sudevi-agro-foods.lovable.app/" />
+        <link rel="canonical" href="https://sudevi-agro-web.lovable.app/" />
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://sudevi-agro-foods.lovable.app/" />
+        <meta property="og:url" content="https://sudevi-agro-web.lovable.app/" />
         <meta property="og:title" content="Sudevi Agro Foods - Premium Indian Pickles, Spices & Food Products" />
         <meta property="og:description" content="Sudevi Agro Foods manufactures authentic Indian pickles, spices, soya chunks and vermicelli in Balasore, Odisha. Taste the tradition with our premium quality food products." />
-        <meta property="og:image" content="https://sudevi-agro-foods.lovable.app/lovable-uploads/35d4be78-f0f1-4c6a-8bf7-40a140323a71.png" />
+        <meta property="og:image" content="https://sudevi-agro-web.lovable.app/sudevi-social-preview.jpg" />
         <meta property="og:locale" content="en_IN" />
         <meta property="og:site_name" content="Sudevi Agro Foods" />
         
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content="https://sudevi-agro-foods.lovable.app/" />
+        <meta name="twitter:url" content="https://sudevi-agro-web.lovable.app/" />
         <meta name="twitter:title" content="Sudevi Agro Foods - Premium Indian Pickles, Spices & Food Products" />
         <meta name="twitter:description" content="Sudevi Agro Foods manufactures authentic Indian pickles, spices, soya chunks and vermicelli in Balasore, Odisha. Taste the tradition with our premium quality food products." />
-        <meta name="twitter:image" content="https://sudevi-agro-foods.lovable.app/lovable-uploads/35d4be78-f0f1-4c6a-8bf7-40a140323a71.png" />
+        <meta name="twitter:image" content="https://sudevi-agro-web.lovable.app/sudevi-social-preview.jpg" />
         
         {/* Additional SEO meta tags */}
         <meta name="geo.region" content="IN-OR" />
@@ -51,8 +51,8 @@ const Index = () => {
             "@context": "https://schema.org",
             "@type": "Organization",
             "name": "Sudevi Agro Foods Private Limited",
-            "url": "https://sudevi-agro-foods.lovable.app/",
-            "logo": "https://sudevi-agro-foods.lovable.app/lovable-uploads/35d4be78-f0f1-4c6a-8bf7-40a140323a71.png",
+            "url": "https://sudevi-agro-web.lovable.app/",
+            "logo": "https://sudevi-agro-web.lovable.app/lovable-uploads/35d4be78-f0f1-4c6a-8bf7-40a140323a71.png",
             "description": "Sudevi Agro Foods manufactures authentic Indian pickles, spices, soya chunks and vermicelli in Balasore, Odisha.",
             "address": {
               "@type": "PostalAddress",
